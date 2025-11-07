@@ -1,4 +1,4 @@
-package com.yugen.anime.ui.screen.top
+package com.yugen.anime.ui.screen.home
 
 import com.yugen.anime.data.remote.model.Anime
 

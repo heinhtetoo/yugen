@@ -1,4 +1,4 @@
-package com.yugen.anime.ui.screen.top
+package com.yugen.anime.ui.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +15,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -23,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,8 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yugen.anime.R
 import com.yugen.anime.data.remote.model.Anime
-import com.yugen.anime.ui.component.YugenTopAppBar
-import com.yugen.anime.ui.navigation.HomeDestination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,23 +42,12 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val topAnimeUiState by homeViewModel.uiState.collectAsState()
 
-    Scaffold(
-        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            YugenTopAppBar(
-                title = stringResource(HomeDestination.titleRes),
-                canNavigateBack = false,
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { innerPadding ->
-        HomeBody(
-            homeUiState = topAnimeUiState,
-            onAnimeClick = navigateToAnimeDetails,
-            modifier = modifier.fillMaxSize(),
-            contentPadding = innerPadding
-        )
-    }
+    HomeBody(
+        homeUiState = topAnimeUiState,
+        onAnimeClick = navigateToAnimeDetails,
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium))
+    )
 }
 
 @Composable
@@ -72,9 +57,8 @@ fun HomeBody(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-
     Column(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -89,9 +73,7 @@ fun HomeBody(
                 data = homeUiState.data,
                 onAnimeClick = onAnimeClick,
                 contentPadding = contentPadding,
-                Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+                Modifier.fillMaxSize()
             )
         }
     }

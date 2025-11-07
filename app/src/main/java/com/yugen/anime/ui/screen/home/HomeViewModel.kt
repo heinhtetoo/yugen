@@ -1,4 +1,4 @@
-package com.yugen.anime.ui.screen.top
+package com.yugen.anime.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
