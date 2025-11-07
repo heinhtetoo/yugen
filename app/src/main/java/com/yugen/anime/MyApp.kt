@@ -1,23 +1,34 @@
 package com.yugen.anime
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yugen.anime.core.ui.theme.YugenTheme
+import com.yugen.anime.ui.component.YugenBottomNavigationBar
+import com.yugen.anime.ui.component.currentDestination
 import com.yugen.anime.ui.navigation.YugenNavHost
+import com.yugen.anime.ui.navigation.YugenNavigationActions
 
 @Composable
 fun MyApp() {
     val navController = rememberNavController()
+    val navActions = remember(navController) { YugenNavigationActions(navController) }
     YugenTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            YugenNavHost(navController)
+        Scaffold(
+            bottomBar = {
+                YugenBottomNavigationBar(
+                    currentDestination = currentDestination(navController),
+                    navigateToTopLevelDestination = navActions::navigateTo
+                )
+            }
+        ) { innerPadding ->
+            YugenNavHost(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
     }
 }

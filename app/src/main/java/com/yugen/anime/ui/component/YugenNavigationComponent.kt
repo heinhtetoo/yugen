@@ -1,0 +1,71 @@
+package com.yugen.anime.ui.component
+
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import com.yugen.anime.ui.navigation.TOP_LEVEL_DESTINATIONS
+import com.yugen.anime.ui.navigation.YugenTopLevelDestination
+
+@Composable
+fun YugenBottomNavigationBar(
+    currentDestination: NavDestination?,
+    navigateToTopLevelDestination: (YugenTopLevelDestination) -> Unit
+) {
+//    Log.e("ROUTE", currentDestination.debugPath())
+    NavigationBar(modifier = Modifier.fillMaxWidth()) {
+        TOP_LEVEL_DESTINATIONS.forEach { topLevelDestination ->
+            NavigationBarItem(
+                selected = currentDestination.hasRoute(topLevelDestination),
+                onClick = { navigateToTopLevelDestination(topLevelDestination) },
+                icon = {
+                    Icon(
+                        imageVector = if (currentDestination.hasRoute(topLevelDestination)) topLevelDestination.selectedIcon else topLevelDestination.unselectedIcon,
+                        contentDescription = stringResource(topLevelDestination.iconTextId)
+                    )
+                },
+                label = {
+                    if (currentDestination.hasRoute(topLevelDestination)) Text(
+                        stringResource(
+                            topLevelDestination.iconTextId
+                        )
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun currentDestination(navController: NavHostController): NavDestination? {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    return navBackStackEntry?.destination
+}
+
+fun NavDestination?.hasRoute(topLevelDestination: YugenTopLevelDestination): Boolean {
+    if (this == null) return false
+
+    return hierarchy.any { navDestination ->
+        val routeName = navDestination.route ?: return@any false
+        val topLevelDestinationRouteName = topLevelDestination.route::class.qualifiedName ?: return@any false
+        routeName.contains(topLevelDestinationRouteName, ignoreCase = true)
+    }
+}
+
+@SuppressLint("RestrictedApi")
+fun NavDestination?.debugPath(): String {
+    return this?.hierarchy
+        ?.joinToString(" -> ") { it.route ?: it.displayName }
+        ?: "No destination"
+}
