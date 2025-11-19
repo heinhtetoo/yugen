@@ -2,7 +2,7 @@ package com.yugen.anime.ui.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yugen.anime.domain.repository.JikanRepository
+import com.yugen.anime.domain.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,35 +14,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val jikanRepository: JikanRepository
+    private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Idle)
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        fetchTopAnime()
+        observeLocalData()
+        refreshFromRemote()
     }
 
-    fun fetchTopAnime() {
+    private fun observeLocalData() {
         viewModelScope.launch {
-            _uiState.value = HomeUiState.Loading
-            try {
-                val response = jikanRepository.fetchTopAnime()
-                if (response.data.isNullOrEmpty()) {
-                    _uiState.value = HomeUiState.Error(
-                        "Top anime list is currently empty",
-                        "The server responds with an empty top anime list."
-                    )
+            animeRepository.getTopAnime().collect { topAnime ->
+                if (topAnime.isEmpty()) {
+                    _uiState.value = HomeUiState.Loading
                 } else {
-                    _uiState.value = HomeUiState.Success(response.data)
+                    _uiState.value = HomeUiState.Success(topAnime)
                 }
-            } catch (e: HttpException) {
+            }
+        }
+    }
+
+    fun refreshFromRemote() {
+        viewModelScope.launch {
+            try {
+                animeRepository.refreshTopAnime()
+            } catch (e: Exception) {
+                val message = when (e) {
+                    is HttpException -> "Network Error"
+                    is IOException -> "I/O Error"
+                    else -> "Unknown Error"
+                }
                 _uiState.value =
-                    HomeUiState.Error("Network Error", e.message ?: "Unknown Error")
-            } catch (e: IOException) {
-                _uiState.value =
-                    HomeUiState.Error("I/O Error", e.message ?: "Unknown Error")
+                    HomeUiState.Error(message, e.message ?: "Unknown Error")
             }
         }
     }

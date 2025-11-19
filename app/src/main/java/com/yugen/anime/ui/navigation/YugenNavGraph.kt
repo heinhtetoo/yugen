@@ -12,7 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.yugen.anime.R
+import com.yugen.anime.domain.model.AnimeSource
 import com.yugen.anime.ui.screen.animedetails.AnimeDetailsScreen
+import com.yugen.anime.ui.screen.favourite.FavouriteAnimeScreen
 import com.yugen.anime.ui.screen.home.HomeScreen
 
 @Composable
@@ -29,17 +31,20 @@ fun YugenNavHost(
             startDestination = Route.Home
         ) {
             composable<Route.Home> {
-                HomeScreen(navigateToAnimeDetails = { animeId ->
-                    navController.navigate(Route.AnimeDetails(animeId = animeId))
-                })
+                HomeScreen(navigateToAnimeDetails = navController::navigateToAnimeDetails)
             }
             composable<Route.AnimeDetails> {
                 AnimeDetailsScreen()
             }
         }
-        composable<Route.Favourite> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.favourite_screen_title))
+        navigation<Route.FavouriteGraph>(
+            startDestination = Route.Favourite
+        ) {
+            composable<Route.Favourite> {
+                FavouriteAnimeScreen(navigateToAnimeDetails = navController::navigateToAnimeDetails)
+            }
+            composable<Route.AnimeDetails> {
+                AnimeDetailsScreen()
             }
         }
         composable<Route.Profile> {
@@ -49,3 +54,6 @@ fun YugenNavHost(
         }
     }
 }
+
+private fun NavHostController.navigateToAnimeDetails(animeId: Int, animeSource: AnimeSource) =
+    navigate((Route.AnimeDetails(animeId, animeSource)))

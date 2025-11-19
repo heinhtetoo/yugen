@@ -1,6 +1,6 @@
 package com.yugen.anime.ui.screen.home
 
-import com.yugen.anime.data.remote.model.Anime
+import com.yugen.anime.domain.model.Anime
 
 sealed interface HomeUiState {
 
