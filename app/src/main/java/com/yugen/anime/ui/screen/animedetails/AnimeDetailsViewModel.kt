@@ -1,13 +1,18 @@
 package com.yugen.anime.ui.screen.animedetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yugen.anime.domain.repository.JikanRepository
+import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.repository.AnimeRepository
+import com.yugen.anime.domain.repository.FavouriteAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -16,39 +21,70 @@ import javax.inject.Inject
 @HiltViewModel
 class AnimeDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val jikanRepository: JikanRepository
+    private val animeRepository: AnimeRepository,
+    private val favouriteAnimeRepository: FavouriteAnimeRepository
 ) : ViewModel() {
 
     private val animeId: Int = savedStateHandle["animeId"]
         ?: error("Missing animeId argument")
+    private val animeSource: AnimeSource = savedStateHandle["animeSource"]
+        ?: error(("Missing animeSource argument"))
 
-    private val _uiState = MutableStateFlow<AnimeDetailsUiState>(AnimeDetailsUiState.Idle)
-    val uiState: StateFlow<AnimeDetailsUiState> = _uiState.asStateFlow()
+    val isFavourite: StateFlow<Boolean> =
+        favouriteAnimeRepository.isFavourite(animeId)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
+
+    val uiState: StateFlow<AnimeDetailsUiState> =
+        combine(
+            animeRepository.getAnimeDetailsById(animeId),
+            isFavourite
+        ) { details, favourite ->
+            if (details == null || details.episodes == 0) {
+                AnimeDetailsUiState.Loading
+            } else {
+                AnimeDetailsUiState.Success(details, favourite)
+            }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = AnimeDetailsUiState.Loading
+        )
 
     init {
-        getAnimeDetailsById()
+        viewModelScope.launch {
+            val local = animeRepository.getAnimeDetailsById(animeId).first()
+            if (local == null || local.episodes == 0) {
+                refreshDetails()
+            }
+        }
     }
 
-    fun getAnimeDetailsById() {
+    fun refreshDetails() {
         viewModelScope.launch {
-            _uiState.value = AnimeDetailsUiState.Loading
             try {
-                val response = jikanRepository.getAnimeDetailsById(animeId = animeId)
-                if (response.data == null) {
-                    _uiState.value = AnimeDetailsUiState.Error(
-                        "No Anime Details",
-                        "The server responds with an empty anime details."
+                animeRepository
+                    .fetchAnimeDetailsById(
+                        animeId,
+                        animeSource == AnimeSource.TOP,
+                        animeSource == AnimeSource.FAVORITE
                     )
-                } else {
-                    _uiState.value = AnimeDetailsUiState.Success(response.data)
-                }
             } catch (e: Exception) {
                 val message = when (e) {
                     is HttpException -> "Network Error"
                     is IOException -> "I/O Error"
                     else -> "Something went wrong."
                 }
-                _uiState.value = AnimeDetailsUiState.Error(message, e.message ?: "Unknown Error")
+            }
+        }
+    }
+
+    fun toggleFavourite() {
+//        Log.e("FAV", isFavourite.toString())
+        viewModelScope.launch {
+            if (isFavourite.value) {
+                favouriteAnimeRepository.removeFavouriteAnime(animeId)
+            } else {
+                favouriteAnimeRepository.addFavouriteAnime(animeId)
             }
         }
     }

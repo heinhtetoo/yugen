@@ -1,4 +1,4 @@
-package com.yugen.anime.ui.screen.home
+package com.yugen.anime.ui.screen.favourite
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +14,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,23 +27,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yugen.anime.R
-import com.yugen.anime.data.remote.model.AnimeResponse
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeSource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun FavouriteAnimeScreen(
     navigateToAnimeDetails: (Int, AnimeSource) -> Unit,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    favouriteAnimeViewModel: FavouriteAnimeViewModel = hiltViewModel()
 ) {
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val topAnimeUiState by homeViewModel.uiState.collectAsState()
+    val favouriteAnimeUiState by favouriteAnimeViewModel.uiState.collectAsState()
 
-    HomeBody(
-        homeUiState = topAnimeUiState,
+    FavouriteAnimeBody(
+        favouriteAnimeUiState = favouriteAnimeUiState,
         onAnimeClick = navigateToAnimeDetails,
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium))
@@ -53,8 +48,8 @@ fun HomeScreen(
 }
 
 @Composable
-fun HomeBody(
-    homeUiState: HomeUiState,
+fun FavouriteAnimeBody(
+    favouriteAnimeUiState: FavouriteAnimeUiState,
     onAnimeClick: (Int, AnimeSource) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
@@ -64,15 +59,15 @@ fun HomeBody(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        when (homeUiState) {
-            is HomeUiState.Idle -> Text(stringResource(R.string.idle))
-            is HomeUiState.Loading -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+        when (favouriteAnimeUiState) {
+            is FavouriteAnimeUiState.Idle -> Text(stringResource(R.string.idle))
+            is FavouriteAnimeUiState.Loading -> Box(Modifier.fillMaxSize(), Alignment.Center) {
                 CircularProgressIndicator()
             }
 
-            is HomeUiState.Error -> ErrorBody(homeUiState.message, homeUiState.details)
-            is HomeUiState.Success -> TopAnimeList(
-                data = homeUiState.data,
+            is FavouriteAnimeUiState.Error -> ErrorBody(favouriteAnimeUiState.message, favouriteAnimeUiState.details)
+            is FavouriteAnimeUiState.Success -> FavouriteAnimeList(
+                data = favouriteAnimeUiState.data,
                 onAnimeClick = onAnimeClick,
                 contentPadding = contentPadding,
                 Modifier.fillMaxSize()
@@ -82,7 +77,7 @@ fun HomeBody(
 }
 
 @Composable
-fun TopAnimeList(
+fun FavouriteAnimeList(
     data: List<Anime>,
     onAnimeClick: (Int, AnimeSource) -> Unit,
     contentPadding: PaddingValues,
@@ -96,7 +91,7 @@ fun TopAnimeList(
         items(data) { anime ->
             AnimeItem(
                 anime = anime,
-                onAnimeClick = { onAnimeClick(anime.id, AnimeSource.TOP) },
+                onAnimeClick = { onAnimeClick(anime.id, AnimeSource.FAVORITE) },
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             )
         }
@@ -151,7 +146,7 @@ fun ErrorBody(
 @Preview
 @Composable
 private fun AnimeListPreview() {
-    TopAnimeList(
+    FavouriteAnimeList(
         listOf(
             Anime(1, "Title 1", "Status 1", "Synopsis 1"),
             Anime(2, "Title 2", "Status 2", "Synopsis 2")

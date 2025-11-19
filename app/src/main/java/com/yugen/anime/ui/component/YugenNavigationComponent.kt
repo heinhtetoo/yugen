@@ -54,13 +54,7 @@ fun currentDestination(navController: NavHostController): NavDestination? {
 }
 
 fun NavDestination?.hasRoute(topLevelDestination: YugenTopLevelDestination): Boolean {
-    if (this == null) return false
-
-    return hierarchy.any { navDestination ->
-        val routeName = navDestination.route ?: return@any false
-        val topLevelDestinationRouteName = topLevelDestination.route::class.qualifiedName ?: return@any false
-        routeName.contains(topLevelDestinationRouteName, ignoreCase = true)
-    }
+    return this?.hierarchy?.any { it.route == topLevelDestination.route::class.qualifiedName } == true
 }
 
 @SuppressLint("RestrictedApi")

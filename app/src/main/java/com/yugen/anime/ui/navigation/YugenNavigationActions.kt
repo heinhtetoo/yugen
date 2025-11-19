@@ -11,15 +11,23 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.yugen.anime.R
+import com.yugen.anime.domain.model.AnimeSource
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Route {
-    @Serializable data object HomeGraph: Route
-    @Serializable data object Home : Route
-    @Serializable data object Favourite : Route
-    @Serializable data object Profile : Route
-    @Serializable data class AnimeDetails(val animeId: Int) : Route
+    @Serializable
+    data object HomeGraph : Route
+    @Serializable
+    data object Home : Route
+    @Serializable
+    data object FavouriteGraph : Route
+    @Serializable
+    data object Favourite : Route
+    @Serializable
+    data object Profile : Route
+    @Serializable
+    data class AnimeDetails(val animeId: Int, val animeSource: AnimeSource) : Route
 }
 
 data class YugenTopLevelDestination(
@@ -44,13 +52,13 @@ class YugenNavigationActions(private val navController: NavHostController) {
 
 val TOP_LEVEL_DESTINATIONS = listOf(
     YugenTopLevelDestination(
-        route = Route.Home,
+        route = Route.HomeGraph,
         selectedIcon = Icons.Filled.LocalLibrary,
         unselectedIcon = Icons.Outlined.LocalLibrary,
         iconTextId = R.string.home_screen_title
     ),
     YugenTopLevelDestination(
-        route = Route.Favourite,
+        route = Route.FavouriteGraph,
         selectedIcon = Icons.Filled.Favorite,
         unselectedIcon = Icons.Outlined.FavoriteBorder,
         iconTextId = R.string.favourite_screen_title
