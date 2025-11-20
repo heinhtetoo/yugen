@@ -77,6 +77,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
+    // DataStore (Preferences)
+    implementation(libs.androidx.datastore.preferences)
+
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)
     releaseImplementation(libs.chucker.release)

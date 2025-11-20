@@ -16,6 +16,7 @@ import com.yugen.anime.domain.model.AnimeSource
 import com.yugen.anime.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.anime.ui.screen.favourite.FavouriteAnimeScreen
 import com.yugen.anime.ui.screen.home.HomeScreen
+import com.yugen.anime.ui.screen.profile.ProfileScreen
 
 @Composable
 fun YugenNavHost(
@@ -48,9 +49,10 @@ fun YugenNavHost(
             }
         }
         composable<Route.Profile> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.profile_screen_title))
-            }
+//            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                Text(stringResource(R.string.profile_screen_title))
+//            }
+            ProfileScreen()
         }
     }
 }
