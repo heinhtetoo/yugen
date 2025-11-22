@@ -2,11 +2,9 @@ package com.yugen.anime.di
 
 import com.yugen.anime.data.repository.AnimeRepositoryImpl
 import com.yugen.anime.data.repository.FavouriteAnimeRepositoryImpl
-import com.yugen.anime.data.repository.JikanRepositoryImpl
 import com.yugen.anime.data.repository.UserPreferencesRepositoryImpl
 import com.yugen.anime.domain.repository.AnimeRepository
 import com.yugen.anime.domain.repository.FavouriteAnimeRepository
-import com.yugen.anime.domain.repository.JikanRepository
 import com.yugen.anime.domain.repository.UserPreferencesRepository
 import dagger.Binds
 import dagger.Module

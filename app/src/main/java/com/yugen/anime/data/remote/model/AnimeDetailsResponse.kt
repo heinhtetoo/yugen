@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class AnimeDetailsResponse(
     @SerialName("mal_id")
     val id: Int,
+    @SerialName("images")
+    val images: ImagesResponse,
     @SerialName("title")
     val title: String?,
     @SerialName("title_english")

@@ -39,7 +39,7 @@ class AnimeDetailsViewModel @Inject constructor(
             animeRepository.getAnimeDetailsById(animeId),
             isFavourite
         ) { details, favourite ->
-            if (details == null || details.episodes == 0) {
+            if (details == null) {
                 AnimeDetailsUiState.Loading
             } else {
                 AnimeDetailsUiState.Success(details, favourite)
@@ -65,8 +65,10 @@ class AnimeDetailsViewModel @Inject constructor(
                 animeRepository
                     .fetchAnimeDetailsById(
                         animeId,
+                        animeSource == AnimeSource.FAVORITE,
                         animeSource == AnimeSource.TOP,
-                        animeSource == AnimeSource.FAVORITE
+                        animeSource == AnimeSource.AWARD_WINNING,
+                        animeSource == AnimeSource.FANTASY,
                     )
             } catch (e: Exception) {
                 val message = when (e) {

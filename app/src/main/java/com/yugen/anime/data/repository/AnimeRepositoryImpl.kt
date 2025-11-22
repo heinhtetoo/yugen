@@ -21,22 +21,48 @@ class AnimeRepositoryImpl @Inject constructor(
         dao.getTopAnime()
             .map { list -> list.map { it.toAnime() } }
 
-    override fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?> =
-        dao.getAnimeDetailsById(id)
-            .map { entity -> entity?.toAnimeDetails() }
-
     override suspend fun refreshTopAnime() {
         val response = api.fetchTopAnime()
         val list = response.data ?: emptyList()
         dao.insertAnimeList(list.map { it.toAnimeEntity(isTop = true) })
     }
 
-    override suspend fun fetchAnimeDetailsById(id: Int, isTop: Boolean, isFavourite: Boolean) {
+    override fun getAwardWinningAnime(): Flow<List<Anime>> =
+        dao.getAwardWinningAnime()
+            .map { list -> list.map { it.toAnime() } }
+
+    // TODO:: Update instead of Insert
+    override suspend fun refreshAwardWinningAnime() {
+        val response = api.fetchAnimeListByGenreId(42)
+        val list = response.data ?: emptyList()
+        dao.insertAnimeList(list.map { it.toAnimeEntity(isAwardWinning = true) })
+    }
+
+    override fun getFantasyAnime(): Flow<List<Anime>> =
+        dao.getFantasyAnime()
+            .map { list -> list.map { it.toAnime() } }
+
+    // TODO:: Update instead of Insert
+    override suspend fun refreshFantasyAnime() {
+        val response = api.fetchAnimeListByGenreId(10)
+        val list = response.data ?: emptyList()
+        dao.insertAnimeList(list.map { it.toAnimeEntity(isFantasy = true) })
+    }
+
+    override fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?> =
+        dao.getAnimeDetailsById(id)
+            .map { entity -> entity?.toAnimeDetails() }
+
+    override suspend fun fetchAnimeDetailsById(
+        id: Int, isFavourite: Boolean, isTop: Boolean, isAwardWinning: Boolean, isFantasy: Boolean
+    ) {
         val response = api.getAnimeById(id)
         val details = response.data
 
         details?.let {
-            dao.insertAnime(it.toAnimeEntity(isTop, isFavourite))
+            dao.insertAnime(
+                it.toAnimeEntity(isFavourite, isTop, isAwardWinning, isFantasy)
+            )
         }
     }
 }

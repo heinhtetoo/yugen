@@ -1,6 +1,8 @@
 package com.yugen.anime.domain.model
 
 enum class AnimeSource {
+    FAVORITE,
     TOP,
-    FAVORITE
+    AWARD_WINNING,
+    FANTASY
 }

@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.coil.compose)
 
     // Networking
     implementation(libs.retrofit)
@@ -66,6 +65,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.gson)
 
     // Dependency Injection
     implementation(libs.hilt.android)
@@ -79,6 +79,9 @@ dependencies {
 
     // DataStore (Preferences)
     implementation(libs.androidx.datastore.preferences)
+
+    // Coil (Image Loading)
+    implementation(libs.coil.compose)
 
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)

@@ -145,6 +145,7 @@ fun AnimeDetailsPreview(modifier: Modifier = Modifier) {
     AnimeDetails(
         AnimeDetails(
             id = 0, title = "Anime Details",
+            images = null,
             titleEnglish = "", titleJapanese = "",
             type = "", episodes = 3,
             status = "", rating = "",

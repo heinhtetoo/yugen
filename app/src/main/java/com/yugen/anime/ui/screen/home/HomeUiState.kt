@@ -2,10 +2,8 @@ package com.yugen.anime.ui.screen.home
 
 import com.yugen.anime.domain.model.Anime
 
-sealed interface HomeUiState {
-
-    data class Success(val data: List<Anime>) : HomeUiState
-    data class Error(val message: String, val details: String) : HomeUiState
-    object Loading : HomeUiState
-    object Idle : HomeUiState
-}
+data class HomeUiState(
+    val topAnime: ListUiState<Anime> = ListUiState.Idle,
+    val awardWinningAnime: ListUiState<Anime> = ListUiState.Idle,
+    val fantasyAnime: ListUiState<Anime> = ListUiState.Idle
+)

@@ -13,6 +13,12 @@ interface AnimeDao {
     @Query("SELECT * FROM anime WHERE isTop = 1")
     fun getTopAnime(): Flow<List<AnimeEntity>>
 
+    @Query("SELECT * FROM anime WHERE isAwardWinning = 1")
+    fun getAwardWinningAnime(): Flow<List<AnimeEntity>>
+
+    @Query("SELECT * FROM anime WHERE isFantasy = 1")
+    fun getFantasyAnime(): Flow<List<AnimeEntity>>
+
     @Query("SELECT * FROM anime WHERE id = :id")
     fun getAnimeDetailsById(id: Int): Flow<AnimeEntity?>
 

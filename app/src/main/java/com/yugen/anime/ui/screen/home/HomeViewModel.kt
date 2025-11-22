@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yugen.anime.domain.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -17,39 +21,62 @@ class HomeViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Idle)
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        observeLocalData()
-        refreshFromRemote()
+        loadListSection(
+            localFlow = animeRepository.getTopAnime(),
+            remoteRefresh = { animeRepository.refreshTopAnime() },
+            onStateChange = { state -> _uiState.update { it.copy(topAnime = state) } }
+        )
+        loadListSection(
+            localFlow = animeRepository.getAwardWinningAnime(),
+            remoteRefresh = { animeRepository.refreshAwardWinningAnime() },
+            onStateChange = { state -> _uiState.update { it.copy(awardWinningAnime = state) } }
+        )
+        loadListSection(
+            localFlow = animeRepository.getFantasyAnime(),
+            remoteRefresh = { animeRepository.refreshFantasyAnime() },
+            onStateChange = { state -> _uiState.update { it.copy(fantasyAnime = state) } }
+        )
     }
 
-    private fun observeLocalData() {
+    private fun <T> loadListSection(
+        localFlow: Flow<List<T>>,
+        remoteRefresh: suspend () -> Unit,
+        onStateChange: (ListUiState<T>) -> Unit
+    ) {
         viewModelScope.launch {
-            animeRepository.getTopAnime().collect { topAnime ->
-                if (topAnime.isEmpty()) {
-                    _uiState.value = HomeUiState.Loading
-                } else {
-                    _uiState.value = HomeUiState.Success(topAnime)
+            localFlow
+                .onStart {
+                    onStateChange(ListUiState.Loading)
+                    try {
+                        remoteRefresh()
+                    } catch (_: Exception) {
+                    }
                 }
-            }
-        }
-    }
-
-    fun refreshFromRemote() {
-        viewModelScope.launch {
-            try {
-                animeRepository.refreshTopAnime()
-            } catch (e: Exception) {
-                val message = when (e) {
-                    is HttpException -> "Network Error"
-                    is IOException -> "I/O Error"
-                    else -> "Unknown Error"
+                .catch { e ->
+                    val message = when (e) {
+                        is HttpException -> "Network Error"
+                        is IOException -> "I/O Error"
+                        else -> "Unknown Error"
+                    }
+                    onStateChange(
+                        ListUiState.Error(message, e.message ?: "Something went wrong.")
+                    )
                 }
-                _uiState.value =
-                    HomeUiState.Error(message, e.message ?: "Unknown Error")
-            }
+                .collect { list ->
+                    if (list.isEmpty()) {
+                        onStateChange(
+                            ListUiState.Error(
+                                "No Data", "This section returns an empty list."
+                            )
+                        )
+                    } else {
+                        onStateChange(ListUiState.Success(list))
+                    }
+                }
         }
     }
 }

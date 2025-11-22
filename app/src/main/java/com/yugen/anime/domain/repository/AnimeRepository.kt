@@ -7,7 +7,20 @@ import kotlinx.coroutines.flow.Flow
 interface AnimeRepository {
 
     fun getTopAnime(): Flow<List<Anime>>
-    fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?>
     suspend fun refreshTopAnime()
-    suspend fun fetchAnimeDetailsById(id: Int, isTop: Boolean, isFavourite: Boolean)
+
+    fun getAwardWinningAnime(): Flow<List<Anime>>
+    suspend fun refreshAwardWinningAnime()
+
+    fun getFantasyAnime(): Flow<List<Anime>>
+    suspend fun refreshFantasyAnime()
+
+    fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?>
+    suspend fun fetchAnimeDetailsById(
+        id: Int,
+        isFavourite: Boolean,
+        isTop: Boolean,
+        isAwardWinning: Boolean,
+        isFantasy: Boolean
+    )
 }

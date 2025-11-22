@@ -148,8 +148,8 @@ fun ErrorBody(
 private fun AnimeListPreview() {
     FavouriteAnimeList(
         listOf(
-            Anime(1, "Title 1", "Status 1", "Synopsis 1"),
-            Anime(2, "Title 2", "Status 2", "Synopsis 2")
+            Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
+            Anime(2, null, "Title 2", "Status 2", "Synopsis 2")
         ),
         { _, _ -> }, PaddingValues(32.dp)
     )
