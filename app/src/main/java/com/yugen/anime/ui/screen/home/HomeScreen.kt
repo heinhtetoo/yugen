@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,10 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -42,6 +47,7 @@ import com.yugen.anime.domain.model.AnimeSource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    navigateToAnimeGenre: (AnimeSource) -> Unit,
     navigateToAnimeDetails: (Int, AnimeSource) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel()
@@ -52,6 +58,7 @@ fun HomeScreen(
 
     HomeBody(
         homeUiState = homeUiState,
+        onSeeMoreClick = navigateToAnimeGenre,
         onAnimeClick = navigateToAnimeDetails,
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium))
@@ -61,30 +68,43 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     homeUiState: HomeUiState,
+    onSeeMoreClick: (AnimeSource) -> Unit,
     onAnimeClick: (Int, AnimeSource) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
-        modifier = modifier,
+        modifier = modifier.verticalScroll(scrollState),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         AnimeSection(
-            R.string.top_anime,
-            homeUiState.topAnime,
+            R.string.top_upcoming_anime,
+            homeUiState.topUpcomingAnime,
+            onSeeMoreClick,
+            onAnimeClick,
+            contentPadding = contentPadding
+        )
+        AnimeSection(
+            R.string.top_airing_anime,
+            homeUiState.topAiringAnime,
+            onSeeMoreClick,
             onAnimeClick,
             contentPadding = contentPadding
         )
         AnimeSection(
             R.string.award_winning_anime,
             homeUiState.awardWinningAnime,
+            onSeeMoreClick,
             onAnimeClick,
             contentPadding = contentPadding
         )
         AnimeSection(
             R.string.fantasy_anime,
             homeUiState.fantasyAnime,
+            onSeeMoreClick,
             onAnimeClick,
             contentPadding = contentPadding
         )
@@ -95,6 +115,7 @@ fun HomeBody(
 fun AnimeSection(
     titleResId: Int,
     listUiState: ListUiState<Anime>,
+    onSeeMoreClick: (AnimeSource) -> Unit,
     onAnimeClick: (Int, AnimeSource) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
@@ -104,7 +125,24 @@ fun AnimeSection(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        Text(stringResource(titleResId), fontWeight = FontWeight.SemiBold)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                stringResource(titleResId),
+                modifier = Modifier.weight(1f),
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Button(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
+                onClick = { onSeeMoreClick(getAnimeSource(titleResId)) }) {
+                Text(stringResource(R.string.see_more))
+            }
+        }
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_small)))
         when (listUiState) {
             is ListUiState.Idle -> Text(stringResource(R.string.idle))
@@ -175,14 +213,6 @@ fun AnimeItem(
         modifier = modifier.clickable { onAnimeClick(anime) },
         elevation = CardDefaults.cardElevation()
     ) {
-//        Row(Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
-//            Column {
-//                Text(anime.title ?: "Unknown", fontWeight = FontWeight.Bold)
-//                anime.status?.let { Text(it) }
-//                anime.synopsis?.let { Text(it, maxLines = 5) }
-//            }
-//        }
-
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(anime.images?.jpg?.imageUrl)
@@ -191,7 +221,7 @@ fun AnimeItem(
             placeholder = painterResource(R.drawable.round_image_24),
             error = painterResource(R.drawable.round_broken_image_24),
             contentDescription = anime.title,
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -216,26 +246,45 @@ fun ErrorBody(
 }
 
 private fun getAnimeWidthDimenResId(titleResId: Int) =
-    if (titleResId == R.string.award_winning_anime) R.dimen.anime_width_large
+    if (titleResId == R.string.top_airing_anime) R.dimen.anime_width_large
     else R.dimen.anime_width_normal
 
 private fun getAnimeHeightDimenResId(titleResId: Int) =
-    if (titleResId == R.string.award_winning_anime) R.dimen.anime_height_large
+    if (titleResId == R.string.top_airing_anime) R.dimen.anime_height_large
     else R.dimen.anime_height_normal
 
 private fun getAnimeSource(titleResId: Int) =
     when (titleResId) {
-        R.string.top_anime -> AnimeSource.TOP
+        R.string.top_airing_anime -> AnimeSource.TOP_AIRING
+        R.string.top_upcoming_anime -> AnimeSource.TOP_UPCOMING
         R.string.award_winning_anime -> AnimeSource.AWARD_WINNING
         R.string.fantasy_anime -> AnimeSource.FANTASY
-        else -> AnimeSource.TOP
+        else -> AnimeSource.TOP_AIRING
     }
 
-@Preview
+@Preview(showBackground = true)
+@Composable
+private fun AnimeSectionPreview() {
+    AnimeSection(
+        titleResId = R.string.top_airing_anime,
+        listUiState = ListUiState.Success(
+            listOf(
+                Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
+                Anime(2, null, "Title 2", "Status 2", "Synopsis 2"),
+                Anime(3, null, "Title 3", "Status 3", "Synopsis 3")
+            )
+        ),
+        onSeeMoreClick = { _ -> },
+        onAnimeClick = { _, _ -> },
+        contentPadding = PaddingValues(32.dp)
+    )
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun AnimeListPreview() {
     AnimeList(
-        titleResId = R.string.top_anime,
+        titleResId = R.string.top_airing_anime,
         listOf(
             Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
             Anime(2, null, "Title 2", "Status 2", "Synopsis 2"),

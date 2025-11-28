@@ -18,7 +18,8 @@ data class AnimeEntity(
     val rating: String? = "",
     val synopsis: String? = "",
     val isFavourite: Boolean = false,
-    val isTop: Boolean = false,
+    val isTopAiring: Boolean = false,
+    val isTopUpcoming: Boolean = false,
     val isAwardWinning: Boolean = false,
     val isFantasy: Boolean = false
 )

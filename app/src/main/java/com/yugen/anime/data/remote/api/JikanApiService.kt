@@ -10,13 +10,18 @@ import retrofit2.http.Query
 interface JikanApiService {
 
     @GET("top/anime")
-    suspend fun fetchTopAnime(): DataResponse<List<AnimeResponse>>
+    suspend fun fetchTopAnime(
+        @Query("filter") filter: String,
+        @Query("page") page: Int,
+//        @Query("limit") limit: Int = 25
+    ): DataResponse<List<AnimeResponse>>
 
     @GET("anime")
     suspend fun fetchAnimeListByGenreId(
         @Query("genres") genreId: Int,
         @Query("order_by") orderBy: String = "popularity",
-        @Query("limit") limit: Int = 20
+        @Query("page") page: Int,
+//        @Query("limit") limit: Int = 25
     ): DataResponse<List<AnimeResponse>>
 
     @GET("anime/{animeId}")

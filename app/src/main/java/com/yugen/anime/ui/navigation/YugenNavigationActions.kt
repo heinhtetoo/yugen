@@ -28,6 +28,8 @@ sealed interface Route {
     data object Profile : Route
     @Serializable
     data class AnimeDetails(val animeId: Int, val animeSource: AnimeSource) : Route
+    @Serializable
+    data class AnimeGenre(val animeSource: AnimeSource) : Route
 }
 
 data class YugenTopLevelDestination(

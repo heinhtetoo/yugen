@@ -21,7 +21,8 @@ fun AnimeResponse.toAnime(): Anime =
 
 fun AnimeResponse.toAnimeEntity(
     isFavourite: Boolean = false,
-    isTop: Boolean = false,
+    isTopAiring: Boolean = false,
+    isTopUpcoming: Boolean = false,
     isAwardWinning: Boolean = false,
     isFantasy: Boolean = false
 ): AnimeEntity =
@@ -32,7 +33,8 @@ fun AnimeResponse.toAnimeEntity(
         status = status,
         synopsis = synopsis,
         isFavourite = isFavourite,
-        isTop = isTop,
+        isTopAiring = isTopAiring,
+        isTopUpcoming = isTopUpcoming,
         isAwardWinning = isAwardWinning,
         isFantasy = isFantasy
     )
@@ -53,7 +55,8 @@ fun AnimeDetailsResponse.toAnimeDetails(): AnimeDetails =
 
 fun AnimeDetailsResponse.toAnimeEntity(
     isFavourite: Boolean = false,
-    isTop: Boolean = false,
+    isTopAiring: Boolean = false,
+    isTopUpcoming: Boolean = false,
     isAwardWinning: Boolean = false,
     isFantasy: Boolean = false
 ): AnimeEntity =
@@ -69,7 +72,8 @@ fun AnimeDetailsResponse.toAnimeEntity(
         rating = rating,
         synopsis = synopsis,
         isFavourite = isFavourite,
-        isTop = isTop,
+        isTopAiring = isTopAiring,
+        isTopUpcoming = isTopUpcoming,
         isAwardWinning = isAwardWinning,
         isFantasy = isFantasy
     )

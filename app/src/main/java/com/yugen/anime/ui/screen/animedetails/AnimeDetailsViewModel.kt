@@ -66,7 +66,8 @@ class AnimeDetailsViewModel @Inject constructor(
                     .fetchAnimeDetailsById(
                         animeId,
                         animeSource == AnimeSource.FAVORITE,
-                        animeSource == AnimeSource.TOP,
+                        animeSource == AnimeSource.TOP_AIRING,
+                        animeSource == AnimeSource.TOP_UPCOMING,
                         animeSource == AnimeSource.AWARD_WINNING,
                         animeSource == AnimeSource.FANTASY,
                     )

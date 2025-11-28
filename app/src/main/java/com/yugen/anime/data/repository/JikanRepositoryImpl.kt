@@ -13,8 +13,8 @@ class JikanRepositoryImpl @Inject constructor(
     private val jikanApiService: JikanApiService
 ) : JikanRepository {
 
-    override suspend fun fetchTopAnime(): DataResponse<List<AnimeResponse>> =
-        jikanApiService.fetchTopAnime()
+    override suspend fun fetchTopAnime(filter: String, page: Int): DataResponse<List<AnimeResponse>> =
+        jikanApiService.fetchTopAnime(filter = filter, page = page)
 
     override suspend fun getAnimeDetailsById(animeId: Int): DataResponse<AnimeDetailsResponse> =
         jikanApiService.getAnimeById(animeId = animeId)

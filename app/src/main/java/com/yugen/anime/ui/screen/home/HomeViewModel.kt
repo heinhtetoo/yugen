@@ -26,9 +26,14 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadListSection(
-            localFlow = animeRepository.getTopAnime(),
-            remoteRefresh = { animeRepository.refreshTopAnime() },
-            onStateChange = { state -> _uiState.update { it.copy(topAnime = state) } }
+            localFlow = animeRepository.getTopAiringAnime(),
+            remoteRefresh = { animeRepository.refreshTopAiringAnime() },
+            onStateChange = { state -> _uiState.update { it.copy(topAiringAnime = state) } }
+        )
+        loadListSection(
+            localFlow = animeRepository.getTopUpcomingAnime(),
+            remoteRefresh = { animeRepository.refreshTopUpcomingAnime() },
+            onStateChange = { state -> _uiState.update { it.copy(topUpcomingAnime = state) } }
         )
         loadListSection(
             localFlow = animeRepository.getAwardWinningAnime(),

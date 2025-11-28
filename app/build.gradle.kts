@@ -83,6 +83,10 @@ dependencies {
     // Coil (Image Loading)
     implementation(libs.coil.compose)
 
+    // Paging 3 (Pagination)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.ktx)
+
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)
     releaseImplementation(libs.chucker.release)

@@ -10,8 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AnimeDao {
 
-    @Query("SELECT * FROM anime WHERE isTop = 1")
-    fun getTopAnime(): Flow<List<AnimeEntity>>
+    @Query("SELECT * FROM anime WHERE isTopAiring = 1")
+    fun getTopAiringAnime(): Flow<List<AnimeEntity>>
+
+    @Query("SELECT * FROM anime WHERE isTopUpcoming = 1")
+    fun getTopUpcomingAnime(): Flow<List<AnimeEntity>>
 
     @Query("SELECT * FROM anime WHERE isAwardWinning = 1")
     fun getAwardWinningAnime(): Flow<List<AnimeEntity>>
