@@ -1,10 +1,9 @@
 package com.yugen.anime.ui.screen.animedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.model.AnimeCategory
 import com.yugen.anime.domain.repository.AnimeRepository
 import com.yugen.anime.domain.repository.FavouriteAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,8 +26,8 @@ class AnimeDetailsViewModel @Inject constructor(
 
     private val animeId: Int = savedStateHandle["animeId"]
         ?: error("Missing animeId argument")
-    private val animeSource: AnimeSource = savedStateHandle["animeSource"]
-        ?: error(("Missing animeSource argument"))
+    private val animeCategory: AnimeCategory = savedStateHandle["animeCategory"]
+        ?: error(("Missing animeCategory argument"))
 
     val isFavourite: StateFlow<Boolean> =
         favouriteAnimeRepository.isFavourite(animeId)
@@ -65,11 +64,11 @@ class AnimeDetailsViewModel @Inject constructor(
                 animeRepository
                     .fetchAnimeDetailsById(
                         animeId,
-                        animeSource == AnimeSource.FAVORITE,
-                        animeSource == AnimeSource.TOP_AIRING,
-                        animeSource == AnimeSource.TOP_UPCOMING,
-                        animeSource == AnimeSource.AWARD_WINNING,
-                        animeSource == AnimeSource.FANTASY,
+                        animeCategory == AnimeCategory.FAVORITE,
+                        animeCategory == AnimeCategory.TOP_AIRING,
+                        animeCategory == AnimeCategory.TOP_UPCOMING,
+                        animeCategory == AnimeCategory.AWARD_WINNING,
+                        animeCategory == AnimeCategory.FANTASY,
                     )
             } catch (e: Exception) {
                 val message = when (e) {

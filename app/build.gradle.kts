@@ -18,7 +18,7 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -86,6 +86,9 @@ dependencies {
     // Paging 3 (Pagination)
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.ktx)
+
+    // Google Fonts
+    implementation(libs.androidx.compose.ui.text.google.fonts)
 
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)

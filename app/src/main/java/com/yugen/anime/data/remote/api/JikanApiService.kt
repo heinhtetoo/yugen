@@ -12,16 +12,20 @@ interface JikanApiService {
     @GET("top/anime")
     suspend fun fetchTopAnime(
         @Query("filter") filter: String,
-        @Query("page") page: Int,
-//        @Query("limit") limit: Int = 25
+        @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 
     @GET("anime")
     suspend fun fetchAnimeListByGenreId(
         @Query("genres") genreId: Int,
         @Query("order_by") orderBy: String = "popularity",
-        @Query("page") page: Int,
-//        @Query("limit") limit: Int = 25
+        @Query("page") page: Int
+    ): DataResponse<List<AnimeResponse>>
+
+    @GET("anime")
+    suspend fun searchAnime(
+        @Query("q") query: String,
+        @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 
     @GET("anime/{animeId}")

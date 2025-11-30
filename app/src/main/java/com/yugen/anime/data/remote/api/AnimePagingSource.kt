@@ -4,13 +4,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.yugen.anime.data.mapper.toAnime
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.model.AnimeCategory
 import retrofit2.HttpException
 import java.io.IOException
 
 class AnimePagingSource(
     private val api: JikanApiService,
-    private val animeSource: AnimeSource
+    private val animeCategory: AnimeCategory? = null,
+    private val searchQuery: String? = null
 ) : PagingSource<Int, Anime>() {
 
     override fun getRefreshKey(state: PagingState<Int, Anime>): Int? {
@@ -24,22 +25,24 @@ class AnimePagingSource(
         val page = params.key ?: 1
 
         return try {
-            val response = when (animeSource) {
-                AnimeSource.TOP_AIRING -> api.fetchTopAnime(filter = "airing", page = page)
-                AnimeSource.TOP_UPCOMING -> api.fetchTopAnime(filter = "upcoming", page = page)
-                AnimeSource.AWARD_WINNING -> api.fetchAnimeListByGenreId(genreId = 42, page = page)
-                AnimeSource.FANTASY -> api.fetchAnimeListByGenreId(genreId = 10, page = page)
-                else -> api.fetchTopAnime(filter = "airing", page = page)
+            val response = when {
+                !searchQuery.isNullOrEmpty() -> api.searchAnime(query = searchQuery, page = page)
+                animeCategory != null -> {
+                    when (animeCategory) {
+                        AnimeCategory.TOP_AIRING -> api.fetchTopAnime(filter = "airing", page = page)
+                        AnimeCategory.TOP_UPCOMING -> api.fetchTopAnime(filter = "upcoming", page = page)
+                        AnimeCategory.AWARD_WINNING -> api.fetchAnimeListByGenreId(genreId = 42, page = page)
+                        AnimeCategory.FANTASY -> api.fetchAnimeListByGenreId(genreId = 10, page = page)
+                        else -> api.searchAnime(query = "", page = page)
+                    }
+                }
+                else -> throw IllegalArgumentException("No query or category provided")
             }
 
-            val animeList = response.data?.map { it.toAnime() } ?: emptyList()
-
-            val hasNextPage = response.pagination?.hasNextPage ?: false
-
             LoadResult.Page(
-                data = animeList,
+                data = response.data?.map { it.toAnime() } ?: emptyList(),
                 prevKey = if (page == 1) null else page - 1,
-                nextKey = if (hasNextPage) page + 1 else null
+                nextKey = if (response.pagination?.hasNextPage ?: false) page + 1 else null
             )
         } catch (e: IOException) {
             LoadResult.Error(e)

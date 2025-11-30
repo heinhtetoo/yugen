@@ -1,4 +1,4 @@
-package com.yugen.anime.ui.screen.animegenre
+package com.yugen.anime.ui.screen.animelist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
@@ -26,20 +25,19 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.yugen.anime.R
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.model.AnimeCategory
 import com.yugen.anime.ui.screen.home.AnimeItem
 
 @Composable
-fun AnimeGenreScreen(
-    navigateToAnimeDetails: (Int, AnimeSource) -> Unit,
+fun AnimeListScreen(
+    navigateToAnimeDetails: (Int, AnimeCategory) -> Unit,
     modifier: Modifier = Modifier,
-    animeGenreViewModel: AnimeGenreViewModel = hiltViewModel()
+    animeListViewModel: AnimeListViewModel = hiltViewModel()
 ) {
     val lazyAnimeList: LazyPagingItems<Anime> =
-        animeGenreViewModel.pagedAnime.collectAsLazyPagingItems()
+        animeListViewModel.pagedAnime.collectAsLazyPagingItems()
 
     val isRefreshing =
         lazyAnimeList.loadState.refresh is LoadState.Loading && lazyAnimeList.itemCount > 0
@@ -49,16 +47,16 @@ fun AnimeGenreScreen(
         onRefresh = { lazyAnimeList.refresh() },
         modifier = modifier.fillMaxSize()
     ) {
-        AnimeGenreBody(
+        AnimeListBody(
             lazyData = lazyAnimeList,
-            onAnimeClick = { navigateToAnimeDetails(it, animeGenreViewModel.animeSource) },
+            onAnimeClick = { navigateToAnimeDetails(it, animeListViewModel.animeCategory) },
             modifier = modifier
         )
     }
 }
 
 @Composable
-fun AnimeGenreBody(
+fun AnimeListBody(
     lazyData: LazyPagingItems<Anime>,
     onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier

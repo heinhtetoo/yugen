@@ -9,5 +9,7 @@
     <string name="award_winning_anime">Award Winning</string>
     <string name="fantasy_anime">Fantasy</string>
     <string name="see_more">See more</string>
+    <string name="search_anime">Search Anime…</string>
+    <string name="no_anime_found">No anime found</string>
     <string name="idle">Idle</string>
 </resources>

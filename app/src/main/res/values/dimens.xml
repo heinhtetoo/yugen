@@ -9,4 +9,9 @@
 
     <dimen name="anime_height_normal">160dp</dimen>
     <dimen name="anime_height_large">240dp</dimen>
+
+    <dimen name="icon_size_normal">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">48dp</dimen>
+    <dimen name="icon_size_2xlarge">56dp</dimen>
 </resources>

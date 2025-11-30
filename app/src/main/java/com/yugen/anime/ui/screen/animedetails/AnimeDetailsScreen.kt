@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -113,7 +114,7 @@ fun AnimeDetails(
             Icon(
                 imageVector = if (isFavourite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                 contentDescription = null,
-                tint = if (isFavourite) Color.Red else LocalContentColor.current,
+                tint = if (isFavourite) MaterialTheme.colorScheme.primary else LocalContentColor.current,
                 modifier = Modifier.size(48.dp)
             )
         }

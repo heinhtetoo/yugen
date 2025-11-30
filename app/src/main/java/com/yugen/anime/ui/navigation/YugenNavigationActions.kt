@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.yugen.anime.R
-import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.model.AnimeCategory
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -27,9 +27,11 @@ sealed interface Route {
     @Serializable
     data object Profile : Route
     @Serializable
-    data class AnimeDetails(val animeId: Int, val animeSource: AnimeSource) : Route
+    data object Search : Route
     @Serializable
-    data class AnimeGenre(val animeSource: AnimeSource) : Route
+    data class AnimeList(val animeCategory: AnimeCategory) : Route
+    @Serializable
+    data class AnimeDetails(val animeId: Int, val animeCategory: AnimeCategory) : Route
 }
 
 data class YugenTopLevelDestination(

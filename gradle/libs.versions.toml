@@ -22,6 +22,7 @@ coil = "2.7.0"
 gson = "2.13.2"
 paging = "3.3.6"
 chucker = "4.2.0"
+uiTextGoogleFonts = "1.9.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,6 +59,7 @@ androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", 
 androidx-paging-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging"}
 chucker-debug = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 chucker-release = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
+androidx-compose-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

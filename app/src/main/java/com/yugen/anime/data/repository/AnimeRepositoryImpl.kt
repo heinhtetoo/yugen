@@ -1,6 +1,5 @@
 package com.yugen.anime.data.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -10,10 +9,9 @@ import com.yugen.anime.data.mapper.toAnimeDetails
 import com.yugen.anime.data.mapper.toAnimeEntity
 import com.yugen.anime.data.remote.api.AnimePagingSource
 import com.yugen.anime.data.remote.api.JikanApiService
-import com.yugen.anime.data.remote.model.AnimeResponse
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeDetails
-import com.yugen.anime.domain.model.AnimeSource
+import com.yugen.anime.domain.model.AnimeCategory
 import com.yugen.anime.domain.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -66,14 +64,24 @@ class AnimeRepositoryImpl @Inject constructor(
         dao.insertAnimeList(list.map { it.toAnimeEntity(isFantasy = true) })
     }
 
-    override fun getPagedAnime(source: AnimeSource): Flow<PagingData<Anime>> =
+    override fun getPagedAnimeList(category: AnimeCategory): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { AnimePagingSource(api, source) }
+            pagingSourceFactory = { AnimePagingSource(api, category) }
+        ).flow
+
+    override fun searchPagedAnime(category: AnimeCategory?, query: String): Flow<PagingData<Anime>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                prefetchDistance = 2,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { AnimePagingSource(api, category, query) }
         ).flow
 
     override fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?> =
