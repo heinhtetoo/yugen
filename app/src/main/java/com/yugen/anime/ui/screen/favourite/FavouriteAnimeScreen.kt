@@ -28,11 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yugen.anime.R
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 
 @Composable
 fun FavouriteAnimeScreen(
-    navigateToAnimeDetails: (Int, AnimeCategory) -> Unit,
+    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     favouriteAnimeViewModel: FavouriteAnimeViewModel = hiltViewModel()
 ) {
@@ -50,7 +50,7 @@ fun FavouriteAnimeScreen(
 @Composable
 fun FavouriteAnimeBody(
     favouriteAnimeUiState: FavouriteAnimeUiState,
-    onAnimeClick: (Int, AnimeCategory) -> Unit,
+    onAnimeClick: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -79,7 +79,7 @@ fun FavouriteAnimeBody(
 @Composable
 fun FavouriteAnimeList(
     data: List<Anime>,
-    onAnimeClick: (Int, AnimeCategory) -> Unit,
+    onAnimeClick: (Int, AnimeGenre) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -91,7 +91,7 @@ fun FavouriteAnimeList(
         items(data) { anime ->
             AnimeItem(
                 anime = anime,
-                onAnimeClick = { onAnimeClick(anime.id, AnimeCategory.FAVORITE) },
+                onAnimeClick = { onAnimeClick(anime.id, AnimeGenre.FAVORITE) },
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             )
         }

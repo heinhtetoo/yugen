@@ -7,8 +7,9 @@ data class AnimeDetails(
     val titleEnglish: String?,
     val titleJapanese: String?,
     val type: String?,
-    val episodes: Int,
+    val episodes: Int?,
     val status: String?,
     val rating: String?,
-    val synopsis: String?
+    val synopsis: String?,
+    val isFavourite: Boolean? = null
 )

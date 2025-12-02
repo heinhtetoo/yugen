@@ -1,3 +1,4 @@
+/*
 package com.yugen.anime.domain.repository
 
 import com.yugen.anime.data.remote.model.AnimeResponse
@@ -8,4 +9,4 @@ interface JikanRepository {
 
     suspend fun fetchTopAnime(filter: String, page: Int): DataResponse<List<AnimeResponse>>
     suspend fun getAnimeDetailsById(animeId: Int): DataResponse<AnimeDetailsResponse>
-}
+}*/

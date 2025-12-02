@@ -1,3 +1,4 @@
+/*
 package com.yugen.anime.data.repository
 
 import com.yugen.anime.data.remote.api.JikanApiService
@@ -18,4 +19,4 @@ class JikanRepositoryImpl @Inject constructor(
 
     override suspend fun getAnimeDetailsById(animeId: Int): DataResponse<AnimeDetailsResponse> =
         jikanApiService.getAnimeById(animeId = animeId)
-}
+}*/

@@ -3,10 +3,10 @@ package com.yugen.anime.data.local.entities
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "favourite_anime",
+    tableName = "anime_genre_listings",
+    primaryKeys = ["genreId", "animeId"],
     foreignKeys = [
         ForeignKey(
             entity = AnimeEntity::class,
@@ -17,7 +17,9 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["animeId"])]
 )
-data class FavouriteAnimeEntity(
-    @PrimaryKey val animeId: Int,
-    val dateAdded: Long = System.currentTimeMillis()
+data class AnimeGenreEntity(
+    val genreId: Int,
+    val genreName: String,
+    val animeId: Int,
+    val position: Int
 )

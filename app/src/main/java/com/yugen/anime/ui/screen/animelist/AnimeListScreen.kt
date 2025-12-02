@@ -27,12 +27,12 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.yugen.anime.R
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.ui.screen.home.AnimeItem
 
 @Composable
 fun AnimeListScreen(
-    navigateToAnimeDetails: (Int, AnimeCategory) -> Unit,
+    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     animeListViewModel: AnimeListViewModel = hiltViewModel()
 ) {
@@ -49,7 +49,7 @@ fun AnimeListScreen(
     ) {
         AnimeListBody(
             lazyData = lazyAnimeList,
-            onAnimeClick = { navigateToAnimeDetails(it, animeListViewModel.animeCategory) },
+            onAnimeClick = { navigateToAnimeDetails(it, animeListViewModel.animeGenre) },
             modifier = modifier
         )
     }

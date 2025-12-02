@@ -1,6 +1,7 @@
 package com.yugen.anime.data.mapper
 
 import com.yugen.anime.data.local.entities.AnimeEntity
+import com.yugen.anime.data.local.entities.AnimeGenreEntity
 import com.yugen.anime.data.remote.model.AnimeDetailsResponse
 import com.yugen.anime.data.remote.model.AnimeResponse
 import com.yugen.anime.data.remote.model.ImageResponse
@@ -19,25 +20,25 @@ fun AnimeResponse.toAnime(): Anime =
         synopsis = synopsis
     )
 
-fun AnimeResponse.toAnimeEntity(
-    isFavourite: Boolean = false,
-    isTopAiring: Boolean = false,
-    isTopUpcoming: Boolean = false,
-    isAwardWinning: Boolean = false,
-    isFantasy: Boolean = false
-): AnimeEntity =
+fun AnimeResponse.toAnimeEntity(): AnimeEntity =
     AnimeEntity(
         id = id,
         images = images.toImages(),
         title = title,
         status = status,
-        synopsis = synopsis,
-        isFavourite = isFavourite,
-        isTopAiring = isTopAiring,
-        isTopUpcoming = isTopUpcoming,
-        isAwardWinning = isAwardWinning,
-        isFantasy = isFantasy
+        synopsis = synopsis
     )
+
+fun AnimeResponse.toAnimeGenreEntityList(): List<AnimeGenreEntity> {
+    return genres?.mapIndexed { index, genre ->
+        AnimeGenreEntity(
+            genreId = genre.genreId,
+            genreName = genre.name,
+            animeId = id,
+            position = index
+        )
+    } ?: emptyList()
+}
 
 fun AnimeDetailsResponse.toAnimeDetails(): AnimeDetails =
     AnimeDetails(
@@ -53,13 +54,7 @@ fun AnimeDetailsResponse.toAnimeDetails(): AnimeDetails =
         synopsis = synopsis
     )
 
-fun AnimeDetailsResponse.toAnimeEntity(
-    isFavourite: Boolean = false,
-    isTopAiring: Boolean = false,
-    isTopUpcoming: Boolean = false,
-    isAwardWinning: Boolean = false,
-    isFantasy: Boolean = false
-): AnimeEntity =
+fun AnimeDetailsResponse.toAnimeEntity(): AnimeEntity =
     AnimeEntity(
         id = id,
         images = images.toImages(),
@@ -70,12 +65,7 @@ fun AnimeDetailsResponse.toAnimeEntity(
         episodes = episodes,
         status = status,
         rating = rating,
-        synopsis = synopsis,
-        isFavourite = isFavourite,
-        isTopAiring = isTopAiring,
-        isTopUpcoming = isTopUpcoming,
-        isAwardWinning = isAwardWinning,
-        isFantasy = isFantasy
+        synopsis = synopsis
     )
 
 fun ImagesResponse.toImages(): Images =

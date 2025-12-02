@@ -3,34 +3,18 @@ package com.yugen.anime.domain.repository
 import androidx.paging.PagingData
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeDetails
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
 
-    fun getTopAiringAnime(): Flow<List<Anime>>
-    suspend fun refreshTopAiringAnime()
+    fun getAnimeListByGenreId(genreId: Int): Flow<List<Anime>>
+    suspend fun refreshAnimeListByGenreId(genreId: Int)
 
-    fun getTopUpcomingAnime(): Flow<List<Anime>>
-    suspend fun refreshTopUpcomingAnime()
+    fun getPagedAnimeListByGenreId(animeGenre: AnimeGenre): Flow<PagingData<Anime>>
 
-    fun getAwardWinningAnime(): Flow<List<Anime>>
-    suspend fun refreshAwardWinningAnime()
+    fun searchPagedAnime(animeGenre: AnimeGenre? = null, query: String): Flow<PagingData<Anime>>
 
-    fun getFantasyAnime(): Flow<List<Anime>>
-    suspend fun refreshFantasyAnime()
-
-    fun getPagedAnimeList(category: AnimeCategory): Flow<PagingData<Anime>>
-
-    fun searchPagedAnime(category: AnimeCategory? = null, query: String): Flow<PagingData<Anime>>
-
-    fun getAnimeDetailsById(id: Int): Flow<AnimeDetails?>
-    suspend fun fetchAnimeDetailsById(
-        id: Int,
-        isFavourite: Boolean,
-        isTopAiring: Boolean,
-        isTopUpcoming: Boolean,
-        isAwardWinning: Boolean,
-        isFantasy: Boolean
-    )
+    fun getAnimeDetailsById(animeId: Int): Flow<AnimeDetails?>
+    suspend fun fetchAnimeDetailsById(animeId: Int)
 }

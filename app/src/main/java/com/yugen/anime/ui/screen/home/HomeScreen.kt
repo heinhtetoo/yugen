@@ -46,14 +46,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yugen.anime.R
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navigateToSearch: () -> Unit,
-    navigateToAnimeList: (AnimeCategory) -> Unit,
-    navigateToAnimeDetails: (Int, AnimeCategory) -> Unit,
+    navigateToAnimeList: (AnimeGenre) -> Unit,
+    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -75,8 +75,8 @@ fun HomeScreen(
 fun HomeBody(
     homeUiState: HomeUiState,
     onSearchClick: () -> Unit,
-    onSeeMoreClick: (AnimeCategory) -> Unit,
-    onAnimeClick: (Int, AnimeCategory) -> Unit,
+    onSeeMoreClick: (AnimeGenre) -> Unit,
+    onAnimeClick: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -148,8 +148,8 @@ fun HomeBody(
 fun AnimeSection(
     titleResId: Int,
     listUiState: ListUiState<Anime>,
-    onSeeMoreClick: (AnimeCategory) -> Unit,
-    onAnimeClick: (Int, AnimeCategory) -> Unit,
+    onSeeMoreClick: (AnimeGenre) -> Unit,
+    onAnimeClick: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -211,7 +211,7 @@ fun AnimeSection(
 fun AnimeList(
     titleResId: Int,
     data: List<Anime>,
-    onAnimeClick: (Int, AnimeCategory) -> Unit,
+    onAnimeClick: (Int, AnimeGenre) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -288,11 +288,11 @@ private fun getAnimeHeightDimenResId(titleResId: Int) =
 
 private fun getAnimeCategory(titleResId: Int) =
     when (titleResId) {
-        R.string.top_airing_anime -> AnimeCategory.TOP_AIRING
-        R.string.top_upcoming_anime -> AnimeCategory.TOP_UPCOMING
-        R.string.award_winning_anime -> AnimeCategory.AWARD_WINNING
-        R.string.fantasy_anime -> AnimeCategory.FANTASY
-        else -> AnimeCategory.TOP_AIRING
+        R.string.top_airing_anime -> AnimeGenre.TOP_AIRING
+        R.string.top_upcoming_anime -> AnimeGenre.TOP_UPCOMING
+        R.string.award_winning_anime -> AnimeGenre.AWARD_WINNING
+        R.string.fantasy_anime -> AnimeGenre.FANTASY
+        else -> AnimeGenre.TOP_AIRING
     }
 
 @Preview(showBackground = true)

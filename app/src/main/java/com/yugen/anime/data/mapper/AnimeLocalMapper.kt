@@ -1,28 +1,30 @@
 package com.yugen.anime.data.mapper
 
-import com.yugen.anime.data.local.entities.AnimeEntity
+import com.yugen.anime.data.local.entities.AnimeEntityWrapper
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeDetails
 
-fun AnimeEntity.toAnime(): Anime =
+fun AnimeEntityWrapper.toAnime(): Anime =
     Anime(
-        id = id,
-        images = images,
-        title = title,
-        status = status,
-        synopsis = synopsis
+        id = animeEntity.id,
+        images = animeEntity.images,
+        title = animeEntity.title,
+        status = animeEntity.status,
+        synopsis = animeEntity.synopsis,
+        isFavourite = isFavourite
     )
 
-fun AnimeEntity.toAnimeDetails(): AnimeDetails =
+fun AnimeEntityWrapper.toAnimeDetails(): AnimeDetails =
     AnimeDetails(
-        id = id,
-        images = images,
-        title = title,
-        titleEnglish = titleEnglish,
-        titleJapanese = titleJapanese,
-        type = type,
-        episodes = episodes,
-        status = status,
-        rating = rating,
-        synopsis = synopsis
+        id = animeEntity.id,
+        images = animeEntity.images,
+        title = animeEntity.title,
+        titleEnglish = animeEntity.titleEnglish,
+        titleJapanese = animeEntity.titleJapanese,
+        type = animeEntity.type,
+        episodes = animeEntity.episodes,
+        status = animeEntity.status,
+        rating = animeEntity.rating,
+        synopsis = animeEntity.synopsis,
+        isFavourite = isFavourite
     )

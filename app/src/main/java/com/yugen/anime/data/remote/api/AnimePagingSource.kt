@@ -4,13 +4,13 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.yugen.anime.data.mapper.toAnime
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import retrofit2.HttpException
 import java.io.IOException
 
 class AnimePagingSource(
     private val api: JikanApiService,
-    private val animeCategory: AnimeCategory? = null,
+    private val animeGenre: AnimeGenre? = null,
     private val searchQuery: String? = null
 ) : PagingSource<Int, Anime>() {
 
@@ -27,12 +27,12 @@ class AnimePagingSource(
         return try {
             val response = when {
                 !searchQuery.isNullOrEmpty() -> api.searchAnime(query = searchQuery, page = page)
-                animeCategory != null -> {
-                    when (animeCategory) {
-                        AnimeCategory.TOP_AIRING -> api.fetchTopAnime(filter = "airing", page = page)
-                        AnimeCategory.TOP_UPCOMING -> api.fetchTopAnime(filter = "upcoming", page = page)
-                        AnimeCategory.AWARD_WINNING -> api.fetchAnimeListByGenreId(genreId = 42, page = page)
-                        AnimeCategory.FANTASY -> api.fetchAnimeListByGenreId(genreId = 10, page = page)
+                animeGenre != null -> {
+                    when (animeGenre) {
+                        AnimeGenre.TOP_AIRING -> api.fetchTopAnime(filter = "airing", page = page)
+                        AnimeGenre.TOP_UPCOMING -> api.fetchTopAnime(filter = "upcoming", page = page)
+                        AnimeGenre.AWARD_WINNING -> api.fetchAnimeListByGenreId(genreId = 42, page = page)
+                        AnimeGenre.FANTASY -> api.fetchAnimeListByGenreId(genreId = 10, page = page)
                         else -> api.searchAnime(query = "", page = page)
                     }
                 }

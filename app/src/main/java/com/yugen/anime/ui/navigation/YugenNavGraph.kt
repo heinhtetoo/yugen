@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.anime.ui.screen.animelist.AnimeListScreen
 import com.yugen.anime.ui.screen.favourite.FavouriteAnimeScreen
@@ -63,8 +63,8 @@ fun YugenNavHost(
 private fun NavHostController.navigateToSearch() =
     navigate((Route.Search))
 
-private fun NavHostController.navigateToAnimeList(animeCategory: AnimeCategory) =
-    navigate((Route.AnimeList(animeCategory)))
+private fun NavHostController.navigateToAnimeList(animeGenre: AnimeGenre) =
+    navigate((Route.AnimeList(animeGenre)))
 
-private fun NavHostController.navigateToAnimeDetails(animeId: Int, animeCategory: AnimeCategory) =
-    navigate((Route.AnimeDetails(animeId, animeCategory)))
+private fun NavHostController.navigateToAnimeDetails(animeId: Int, animeGenre: AnimeGenre) =
+    navigate((Route.AnimeDetails(animeId, animeGenre)))

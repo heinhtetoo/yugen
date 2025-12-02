@@ -21,12 +21,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.yugen.anime.R
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.ui.screen.animelist.AnimeListBody
 
 @Composable
 fun SearchScreen(
-    navigateToAnimeDetails: (Int, AnimeCategory) -> Unit,
+    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -52,7 +52,7 @@ fun SearchScreen(
         } else {
             AnimeListBody(
                 lazyData = searchResults,
-                onAnimeClick = { navigateToAnimeDetails(it, AnimeCategory.NONE) },
+                onAnimeClick = { navigateToAnimeDetails(it, AnimeGenre.NONE) },
                 modifier = modifier
             )
         }

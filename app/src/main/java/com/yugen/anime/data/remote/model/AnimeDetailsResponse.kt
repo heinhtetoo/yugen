@@ -18,7 +18,7 @@ data class AnimeDetailsResponse(
     @SerialName("type")
     val type: String?,
     @SerialName("episodes")
-    val episodes: Int,
+    val episodes: Int?,
     @SerialName("status")
     val status: String?,
     @SerialName("rating")

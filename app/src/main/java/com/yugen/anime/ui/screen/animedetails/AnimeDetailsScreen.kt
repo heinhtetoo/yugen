@@ -107,7 +107,9 @@ fun AnimeDetails(
             Text(it, maxLines = 5)
             Spacer(Modifier.height(dimensionResource(R.dimen.padding_medium)))
         }
-        Text("${animeDetails.episodes} Episodes")
+        animeDetails.episodes?.let { episodes ->
+            Text("$episodes Episodes")
+        }
 
         Spacer(Modifier.height(dimensionResource(R.dimen.padding_medium)))
         IconButton(onClick = { onFavouriteClick() }) {

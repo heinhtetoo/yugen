@@ -1,6 +1,6 @@
 package com.yugen.anime.domain.model
 
-enum class AnimeCategory {
+enum class AnimeGenre {
     NONE,
     FAVORITE,
     TOP_AIRING,

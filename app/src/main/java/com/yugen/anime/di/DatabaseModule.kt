@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.yugen.anime.data.local.YugenDatabase
 import com.yugen.anime.data.local.dao.AnimeDao
-import com.yugen.anime.data.local.dao.FavouriteAnimeDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +27,6 @@ object DatabaseModule {
     @Provides
     fun provideAnimeDao(db: YugenDatabase): AnimeDao = db.animeDao()
 
-    @Provides
-    fun provideFavouriteAnimeDao(db: YugenDatabase): FavouriteAnimeDao = db.favouriteAnimeDao()
+//    @Provides
+//    fun provideFavouriteAnimeDao(db: YugenDatabase): FavouriteAnimeDao = db.favouriteAnimeDao()
 }

@@ -1,9 +1,10 @@
 package com.yugen.anime.ui.screen.animedetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.domain.repository.AnimeRepository
 import com.yugen.anime.domain.repository.FavouriteAnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,11 +27,11 @@ class AnimeDetailsViewModel @Inject constructor(
 
     private val animeId: Int = savedStateHandle["animeId"]
         ?: error("Missing animeId argument")
-    private val animeCategory: AnimeCategory = savedStateHandle["animeCategory"]
-        ?: error(("Missing animeCategory argument"))
+    private val animeGenre: AnimeGenre = savedStateHandle["animeGenre"]
+        ?: error(("Missing animeGenre argument"))
 
     val isFavourite: StateFlow<Boolean> =
-        favouriteAnimeRepository.isFavourite(animeId)
+        favouriteAnimeRepository.isFavouriteAnime(animeId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     val uiState: StateFlow<AnimeDetailsUiState> =
@@ -61,15 +62,7 @@ class AnimeDetailsViewModel @Inject constructor(
     fun refreshDetails() {
         viewModelScope.launch {
             try {
-                animeRepository
-                    .fetchAnimeDetailsById(
-                        animeId,
-                        animeCategory == AnimeCategory.FAVORITE,
-                        animeCategory == AnimeCategory.TOP_AIRING,
-                        animeCategory == AnimeCategory.TOP_UPCOMING,
-                        animeCategory == AnimeCategory.AWARD_WINNING,
-                        animeCategory == AnimeCategory.FANTASY,
-                    )
+                animeRepository.fetchAnimeDetailsById(animeId)
             } catch (e: Exception) {
                 val message = when (e) {
                     is HttpException -> "Network Error"

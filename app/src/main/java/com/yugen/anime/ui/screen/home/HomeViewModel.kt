@@ -21,28 +21,28 @@ class HomeViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState())
+    private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
         loadListSection(
-            localFlow = animeRepository.getTopAiringAnime(),
-            remoteRefresh = { animeRepository.refreshTopAiringAnime() },
+            localFlow = animeRepository.getAnimeListByGenreId(1),
+            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(1) },
             onStateChange = { state -> _uiState.update { it.copy(topAiringAnime = state) } }
         )
         loadListSection(
-            localFlow = animeRepository.getTopUpcomingAnime(),
-            remoteRefresh = { animeRepository.refreshTopUpcomingAnime() },
+            localFlow = animeRepository.getAnimeListByGenreId(2),
+            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(2) },
             onStateChange = { state -> _uiState.update { it.copy(topUpcomingAnime = state) } }
         )
         loadListSection(
-            localFlow = animeRepository.getAwardWinningAnime(),
-            remoteRefresh = { animeRepository.refreshAwardWinningAnime() },
+            localFlow = animeRepository.getAnimeListByGenreId(42),
+            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(42) },
             onStateChange = { state -> _uiState.update { it.copy(awardWinningAnime = state) } }
         )
         loadListSection(
-            localFlow = animeRepository.getFantasyAnime(),
-            remoteRefresh = { animeRepository.refreshFantasyAnime() },
+            localFlow = animeRepository.getAnimeListByGenreId(10),
+            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(10) },
             onStateChange = { state -> _uiState.update { it.copy(fantasyAnime = state) } }
         )
     }

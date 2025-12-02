@@ -1,7 +1,6 @@
 package com.yugen.anime.data.repository
 
 import com.yugen.anime.data.local.dao.AnimeDao
-import com.yugen.anime.data.local.dao.FavouriteAnimeDao
 import com.yugen.anime.data.local.entities.FavouriteAnimeEntity
 import com.yugen.anime.data.mapper.toAnime
 import com.yugen.anime.domain.model.Anime
@@ -13,26 +12,21 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavouriteAnimeRepositoryImpl @Inject constructor(
-    private val animeDao: AnimeDao,
-    private val favouriteDao: FavouriteAnimeDao
+    private val animeDao: AnimeDao
 ) : FavouriteAnimeRepository {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getFavouriteAnime(): Flow<List<Anime>> =
-        favouriteDao.getFavouriteAnimeIds().flatMapLatest { ids ->
-            animeDao.getAnimeListByIds(ids).map { list ->
-                list.map { it.toAnime() }
-            }
-        }
+        animeDao.getFavouriteAnime().map { it.map { anime -> anime.toAnime() } }
 
-    override fun isFavourite(id: Int): Flow<Boolean> =
-        favouriteDao.isFavourite(id)
-
-    override suspend fun addFavouriteAnime(id: Int) {
-        favouriteDao.insertFavouriteAnime(FavouriteAnimeEntity(id = id))
+    override suspend fun addFavouriteAnime(animeId: Int) {
+        animeDao.insertFavouriteAnime(FavouriteAnimeEntity(animeId = animeId))
     }
 
-    override suspend fun removeFavouriteAnime(id: Int) {
-        favouriteDao.deleteFavouriteAnime(id = id)
+    override suspend fun removeFavouriteAnime(animeId: Int) {
+        animeDao.deleteFavouriteAnime(animeId = animeId)
     }
+
+    override fun isFavouriteAnime(animeId: Int): Flow<Boolean> =
+        animeDao.isFavouriteAnime(animeId)
 }

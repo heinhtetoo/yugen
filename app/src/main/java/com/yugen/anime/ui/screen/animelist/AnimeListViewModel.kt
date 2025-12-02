@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeCategory
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.domain.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,9 +18,9 @@ class AnimeListViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
-    val animeCategory: AnimeCategory = savedStateHandle["animeCategory"]
-        ?: error(("Missing animeCategory argument"))
+    val animeGenre: AnimeGenre = savedStateHandle["animeGenre"]
+        ?: error(("Missing animeGenre argument"))
 
-    val pagedAnime: Flow<PagingData<Anime>> = animeRepository.getPagedAnimeList(animeCategory)
+    val pagedAnime: Flow<PagingData<Anime>> = animeRepository.getPagedAnimeListByGenreId(animeGenre)
         .cachedIn(viewModelScope)
 }
