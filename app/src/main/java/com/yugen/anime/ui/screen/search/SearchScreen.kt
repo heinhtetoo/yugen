@@ -26,7 +26,7 @@ import com.yugen.anime.ui.screen.animelist.AnimeListBody
 
 @Composable
 fun SearchScreen(
-    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
+    navigateToAnimeDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -52,7 +52,7 @@ fun SearchScreen(
         } else {
             AnimeListBody(
                 lazyData = searchResults,
-                onAnimeClick = { navigateToAnimeDetails(it, AnimeGenre.NONE) },
+                onAnimeClick = { navigateToAnimeDetails(it) },
                 modifier = modifier
             )
         }

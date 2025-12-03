@@ -10,7 +10,7 @@ import java.io.IOException
 
 class AnimePagingSource(
     private val api: JikanApiService,
-    private val animeGenre: AnimeGenre? = null,
+    private val animeGenreId: Int? = null,
     private val searchQuery: String? = null
 ) : PagingSource<Int, Anime>() {
 
@@ -27,16 +27,8 @@ class AnimePagingSource(
         return try {
             val response = when {
                 !searchQuery.isNullOrEmpty() -> api.searchAnime(query = searchQuery, page = page)
-                animeGenre != null -> {
-                    when (animeGenre) {
-                        AnimeGenre.TOP_AIRING -> api.fetchTopAnime(filter = "airing", page = page)
-                        AnimeGenre.TOP_UPCOMING -> api.fetchTopAnime(filter = "upcoming", page = page)
-                        AnimeGenre.AWARD_WINNING -> api.fetchAnimeListByGenreId(genreId = 42, page = page)
-                        AnimeGenre.FANTASY -> api.fetchAnimeListByGenreId(genreId = 10, page = page)
-                        else -> api.searchAnime(query = "", page = page)
-                    }
-                }
-                else -> throw IllegalArgumentException("No query or category provided")
+                animeGenreId != null -> api.fetchAnimeListByGenreId(genreId = animeGenreId, page = page)
+                else -> throw IllegalArgumentException("No search query or anime genre id provided")
             }
 
             LoadResult.Page(

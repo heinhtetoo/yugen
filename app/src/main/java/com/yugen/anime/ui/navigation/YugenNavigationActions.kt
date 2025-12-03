@@ -17,6 +17,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Route {
     @Serializable
+    data object Splash : Route
+    @Serializable
+    data object Personalisation : Route
+    @Serializable
     data object HomeGraph : Route
     @Serializable
     data object Home : Route
@@ -29,9 +33,9 @@ sealed interface Route {
     @Serializable
     data object Search : Route
     @Serializable
-    data class AnimeList(val animeGenre: AnimeGenre) : Route
+    data class AnimeList(val genreId: Int) : Route
     @Serializable
-    data class AnimeDetails(val animeId: Int, val animeGenre: AnimeGenre) : Route
+    data class AnimeDetails(val animeId: Int) : Route
 }
 
 data class YugenTopLevelDestination(

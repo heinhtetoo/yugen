@@ -7,15 +7,18 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.yugen.anime.core.utils.Converters
 import com.yugen.anime.data.local.dao.AnimeDao
+import com.yugen.anime.data.local.dao.AnimeGenreDao
 import com.yugen.anime.data.local.entities.AnimeEntity
+import com.yugen.anime.data.local.entities.AnimeGenreCrossRefEntity
 import com.yugen.anime.data.local.entities.AnimeGenreEntity
 import com.yugen.anime.data.local.entities.FavouriteAnimeEntity
 
-@Database(entities = [AnimeEntity::class, AnimeGenreEntity::class, FavouriteAnimeEntity::class], version = 1, exportSchema = false)
+@Database(entities = [AnimeEntity::class, AnimeGenreEntity::class, AnimeGenreCrossRefEntity::class, FavouriteAnimeEntity::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class YugenDatabase : RoomDatabase() {
 
     abstract fun animeDao(): AnimeDao
+    abstract fun animeGenreDao(): AnimeGenreDao
 //    abstract fun favouriteAnimeDao(): FavouriteAnimeDao
 
     companion object {

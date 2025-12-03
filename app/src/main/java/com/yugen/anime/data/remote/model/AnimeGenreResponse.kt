@@ -4,13 +4,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GenreResponse(
+data class AnimeGenreResponse(
     @SerialName("mal_id")
-    val genreId: Int,
+    val id: Int,
     @SerialName("type")
-    val type: String,
+    val type: String? = null,
     @SerialName("name")
     val name: String,
     @SerialName("url")
-    val url: String
+    val url: String,
+    @SerialName("count")
+    val count: Int? = null
 )

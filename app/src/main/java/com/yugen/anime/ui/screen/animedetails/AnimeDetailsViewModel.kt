@@ -27,8 +27,6 @@ class AnimeDetailsViewModel @Inject constructor(
 
     private val animeId: Int = savedStateHandle["animeId"]
         ?: error("Missing animeId argument")
-    private val animeGenre: AnimeGenre = savedStateHandle["animeGenre"]
-        ?: error(("Missing animeGenre argument"))
 
     val isFavourite: StateFlow<Boolean> =
         favouriteAnimeRepository.isFavouriteAnime(animeId)

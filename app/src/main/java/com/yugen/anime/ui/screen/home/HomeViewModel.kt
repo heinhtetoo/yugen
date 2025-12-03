@@ -1,9 +1,11 @@
 package com.yugen.anime.ui.screen.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yugen.anime.domain.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +27,9 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            animeRepository.refreshAnimeGenresIfNecessary()
+        }
         loadListSection(
             localFlow = animeRepository.getAnimeListByGenreId(1),
             remoteRefresh = { animeRepository.refreshAnimeListByGenreId(1) },
@@ -53,6 +58,7 @@ class HomeViewModel @Inject constructor(
         onStateChange: (ListUiState<T>) -> Unit
     ) {
         viewModelScope.launch {
+            delay(600)
             localFlow
                 .onStart {
                     onStateChange(ListUiState.Loading)

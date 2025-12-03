@@ -52,8 +52,8 @@ import com.yugen.anime.domain.model.AnimeGenre
 @Composable
 fun HomeScreen(
     navigateToSearch: () -> Unit,
-    navigateToAnimeList: (AnimeGenre) -> Unit,
-    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
+    navigateToAnimeList: (Int) -> Unit,
+    navigateToAnimeDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -75,8 +75,8 @@ fun HomeScreen(
 fun HomeBody(
     homeUiState: HomeUiState,
     onSearchClick: () -> Unit,
-    onSeeMoreClick: (AnimeGenre) -> Unit,
-    onAnimeClick: (Int, AnimeGenre) -> Unit,
+    onSeeMoreClick: (Int) -> Unit,
+    onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -148,8 +148,8 @@ fun HomeBody(
 fun AnimeSection(
     titleResId: Int,
     listUiState: ListUiState<Anime>,
-    onSeeMoreClick: (AnimeGenre) -> Unit,
-    onAnimeClick: (Int, AnimeGenre) -> Unit,
+    onSeeMoreClick: (Int) -> Unit,
+    onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -172,7 +172,8 @@ fun AnimeSection(
             )
             Button(
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
-                onClick = { onSeeMoreClick(getAnimeCategory(titleResId)) }) {
+                // TODO :: Use id from genre object
+                onClick = { onSeeMoreClick(42) }) {
                 Text(stringResource(R.string.see_more))
             }
         }
@@ -211,7 +212,7 @@ fun AnimeSection(
 fun AnimeList(
     titleResId: Int,
     data: List<Anime>,
-    onAnimeClick: (Int, AnimeGenre) -> Unit,
+    onAnimeClick: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -223,7 +224,7 @@ fun AnimeList(
         items(data) { anime ->
             AnimeItem(
                 anime = anime,
-                onAnimeClick = { onAnimeClick(anime.id, getAnimeCategory(titleResId)) },
+                onAnimeClick = { onAnimeClick(anime.id) },
                 modifier = Modifier
                     .size(
                         dimensionResource(getAnimeWidthDimenResId(titleResId)),
@@ -286,15 +287,6 @@ private fun getAnimeHeightDimenResId(titleResId: Int) =
     if (titleResId == R.string.top_airing_anime) R.dimen.anime_height_large
     else R.dimen.anime_height_normal
 
-private fun getAnimeCategory(titleResId: Int) =
-    when (titleResId) {
-        R.string.top_airing_anime -> AnimeGenre.TOP_AIRING
-        R.string.top_upcoming_anime -> AnimeGenre.TOP_UPCOMING
-        R.string.award_winning_anime -> AnimeGenre.AWARD_WINNING
-        R.string.fantasy_anime -> AnimeGenre.FANTASY
-        else -> AnimeGenre.TOP_AIRING
-    }
-
 @Preview(showBackground = true)
 @Composable
 private fun AnimeSectionPreview() {
@@ -308,7 +300,7 @@ private fun AnimeSectionPreview() {
             )
         ),
         onSeeMoreClick = { _ -> },
-        onAnimeClick = { _, _ -> },
+        onAnimeClick = { _ -> },
         contentPadding = PaddingValues(32.dp)
     )
 }
@@ -323,6 +315,6 @@ private fun AnimeListPreview() {
             Anime(2, null, "Title 2", "Status 2", "Synopsis 2"),
             Anime(3, null, "Title 3", "Status 3", "Synopsis 3")
         ),
-        { _, _ -> }, PaddingValues(32.dp)
+        { _ -> }, PaddingValues(32.dp)
     )
 }

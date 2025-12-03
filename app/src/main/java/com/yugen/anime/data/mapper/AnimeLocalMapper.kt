@@ -1,8 +1,18 @@
 package com.yugen.anime.data.mapper
 
 import com.yugen.anime.data.local.entities.AnimeEntityWrapper
+import com.yugen.anime.data.local.entities.AnimeGenreEntity
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeDetails
+import com.yugen.anime.domain.model.AnimeGenre
+
+fun AnimeGenreEntity.toAnimeGenre(): AnimeGenre =
+    AnimeGenre(
+        id = id,
+        type = type,
+        name = name,
+        count = count
+    )
 
 fun AnimeEntityWrapper.toAnime(): Anime =
     Anime(

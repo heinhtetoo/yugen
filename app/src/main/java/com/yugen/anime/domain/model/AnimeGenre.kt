@@ -1,10 +1,8 @@
 package com.yugen.anime.domain.model
 
-enum class AnimeGenre {
-    NONE,
-    FAVORITE,
-    TOP_AIRING,
-    TOP_UPCOMING,
-    AWARD_WINNING,
-    FANTASY
-}
+data class AnimeGenre(
+    val id: Int,
+    val type: String?,
+    val name: String,
+    val count: Int?
+)

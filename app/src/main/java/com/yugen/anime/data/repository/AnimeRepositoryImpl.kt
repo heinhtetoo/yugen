@@ -1,15 +1,17 @@
 package com.yugen.anime.data.repository
 
+import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.room.withTransaction
-import com.yugen.anime.data.local.YugenDatabase
 import com.yugen.anime.data.local.dao.AnimeDao
+import com.yugen.anime.data.local.dao.AnimeGenreDao
 import com.yugen.anime.data.mapper.toAnime
 import com.yugen.anime.data.mapper.toAnimeDetails
 import com.yugen.anime.data.mapper.toAnimeEntity
-import com.yugen.anime.data.mapper.toAnimeGenreEntityList
+import com.yugen.anime.data.mapper.toAnimeGenre
+import com.yugen.anime.data.mapper.toAnimeGenreCrossRefEntityList
+import com.yugen.anime.data.mapper.toAnimeGenreEntity
 import com.yugen.anime.data.remote.api.AnimePagingSource
 import com.yugen.anime.data.remote.api.JikanApiService
 import com.yugen.anime.domain.model.Anime
@@ -18,24 +20,47 @@ import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.domain.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.lang.Exception
 import javax.inject.Inject
 
 class AnimeRepositoryImpl @Inject constructor(
     private val api: JikanApiService,
-    private val dao: AnimeDao
+    private val animeDao: AnimeDao,
+    private val genreDao: AnimeGenreDao
 ) : AnimeRepository {
 
+    override fun getAnimeGenres(): Flow<List<AnimeGenre>> =
+        genreDao.getAnimeGenres()
+            .map { list -> list.map { it.toAnimeGenre() } }
+
+    override suspend fun refreshAnimeGenresIfNecessary() {
+        val count = genreDao.getGenreCount()
+
+        if (count == 0) {
+            try {
+                val response = api.fetchAnimeGenres()
+                val list = response.data ?: emptyList()
+
+                genreDao.upsertAnimeGenres(
+                    animeGenres = list.map { it.toAnimeGenreEntity() }
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     override fun getAnimeListByGenreId(genreId: Int): Flow<List<Anime>> =
-        dao.getAnimeListByGenreId(genreId)
+        animeDao.getAnimeListByGenreId(genreId)
             .map { list -> list.map { it.toAnime() } }
 
     override suspend fun refreshAnimeListByGenreId(genreId: Int) {
         val response = api.fetchAnimeListByGenreId(genreId = genreId, page = 1)
         val list = response.data ?: emptyList()
 
-        dao.refreshAnimeListWithGenreLinks(
+        animeDao.refreshAnimeListWithGenreLinks(
             list = list.map { it.toAnimeEntity() },
-            links = list.flatMap { it.toAnimeGenreEntityList() }
+            links = list.flatMap { it.toAnimeGenreCrossRefEntityList() }
         )
     }
 
@@ -51,34 +76,34 @@ class AnimeRepositoryImpl @Inject constructor(
 //        dao.insertAnimeList(list.map { it.toAnimeEntity(isTopUpcoming = true) })
 //    }
 
-    override fun getPagedAnimeListByGenreId(animeGenre: AnimeGenre): Flow<PagingData<Anime>> =
+    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { AnimePagingSource(api, animeGenre) }
+            pagingSourceFactory = { AnimePagingSource(api, genreId) }
         ).flow
 
-    override fun searchPagedAnime(animeGenre: AnimeGenre?, query: String): Flow<PagingData<Anime>> =
+    override fun searchPagedAnime(genreId: Int?, query: String): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { AnimePagingSource(api, animeGenre, query) }
+            pagingSourceFactory = { AnimePagingSource(api, genreId, query) }
         ).flow
 
     override fun getAnimeDetailsById(animeId: Int): Flow<AnimeDetails?> =
-        dao.getAnimeDetailsByAnimeId(animeId)
+        animeDao.getAnimeDetailsByAnimeId(animeId)
             .map { entity -> entity?.toAnimeDetails() }
 
     override suspend fun fetchAnimeDetailsById(animeId: Int) {
         val response = api.getAnimeById(animeId)
         val details = response.data
 
-        details?.let { dao.upsertAnime(it.toAnimeEntity()) }
+        details?.let { animeDao.upsertAnime(it.toAnimeEntity()) }
     }
 }

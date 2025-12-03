@@ -16,5 +16,5 @@ data class AnimeResponse(
     @SerialName("synopsis")
     val synopsis: String?,
     @SerialName("genres")
-    val genres: List<GenreResponse>?
+    val genres: List<AnimeGenreResponse>?
 )

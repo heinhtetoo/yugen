@@ -32,7 +32,7 @@ import com.yugen.anime.ui.screen.home.AnimeItem
 
 @Composable
 fun AnimeListScreen(
-    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
+    navigateToAnimeDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     animeListViewModel: AnimeListViewModel = hiltViewModel()
 ) {
@@ -49,7 +49,7 @@ fun AnimeListScreen(
     ) {
         AnimeListBody(
             lazyData = lazyAnimeList,
-            onAnimeClick = { navigateToAnimeDetails(it, animeListViewModel.animeGenre) },
+            onAnimeClick = { navigateToAnimeDetails(it) },
             modifier = modifier
         )
     }

@@ -32,7 +32,7 @@ import com.yugen.anime.domain.model.AnimeGenre
 
 @Composable
 fun FavouriteAnimeScreen(
-    navigateToAnimeDetails: (Int, AnimeGenre) -> Unit,
+    navigateToAnimeDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     favouriteAnimeViewModel: FavouriteAnimeViewModel = hiltViewModel()
 ) {
@@ -50,7 +50,7 @@ fun FavouriteAnimeScreen(
 @Composable
 fun FavouriteAnimeBody(
     favouriteAnimeUiState: FavouriteAnimeUiState,
-    onAnimeClick: (Int, AnimeGenre) -> Unit,
+    onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -79,7 +79,7 @@ fun FavouriteAnimeBody(
 @Composable
 fun FavouriteAnimeList(
     data: List<Anime>,
-    onAnimeClick: (Int, AnimeGenre) -> Unit,
+    onAnimeClick: (Int) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
@@ -91,7 +91,7 @@ fun FavouriteAnimeList(
         items(data) { anime ->
             AnimeItem(
                 anime = anime,
-                onAnimeClick = { onAnimeClick(anime.id, AnimeGenre.FAVORITE) },
+                onAnimeClick = { onAnimeClick(anime.id) },
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
             )
         }
@@ -151,6 +151,6 @@ private fun AnimeListPreview() {
             Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
             Anime(2, null, "Title 2", "Status 2", "Synopsis 2")
         ),
-        { _, _ -> }, PaddingValues(32.dp)
+        { _ -> }, PaddingValues(32.dp)
     )
 }

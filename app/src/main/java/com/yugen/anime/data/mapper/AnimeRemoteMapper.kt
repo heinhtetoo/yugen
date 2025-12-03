@@ -1,15 +1,34 @@
 package com.yugen.anime.data.mapper
 
 import com.yugen.anime.data.local.entities.AnimeEntity
+import com.yugen.anime.data.local.entities.AnimeGenreCrossRefEntity
 import com.yugen.anime.data.local.entities.AnimeGenreEntity
 import com.yugen.anime.data.remote.model.AnimeDetailsResponse
+import com.yugen.anime.data.remote.model.AnimeGenreResponse
 import com.yugen.anime.data.remote.model.AnimeResponse
 import com.yugen.anime.data.remote.model.ImageResponse
 import com.yugen.anime.data.remote.model.ImagesResponse
 import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.model.AnimeDetails
+import com.yugen.anime.domain.model.AnimeGenre
 import com.yugen.anime.domain.model.Image
 import com.yugen.anime.domain.model.Images
+
+fun AnimeGenreResponse.toAnimeGenre(): AnimeGenre =
+    AnimeGenre(
+        id = id,
+        type = type,
+        name = name,
+        count = count
+    )
+
+fun AnimeGenreResponse.toAnimeGenreEntity(): AnimeGenreEntity =
+    AnimeGenreEntity(
+        id = id,
+        type = type,
+        name = name,
+        count = count
+    )
 
 fun AnimeResponse.toAnime(): Anime =
     Anime(
@@ -29,11 +48,10 @@ fun AnimeResponse.toAnimeEntity(): AnimeEntity =
         synopsis = synopsis
     )
 
-fun AnimeResponse.toAnimeGenreEntityList(): List<AnimeGenreEntity> {
+fun AnimeResponse.toAnimeGenreCrossRefEntityList(): List<AnimeGenreCrossRefEntity> {
     return genres?.mapIndexed { index, genre ->
-        AnimeGenreEntity(
-            genreId = genre.genreId,
-            genreName = genre.name,
+        AnimeGenreCrossRefEntity(
+            genreId = genre.id,
             animeId = id,
             position = index
         )

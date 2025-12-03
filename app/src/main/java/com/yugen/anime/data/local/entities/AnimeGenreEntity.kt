@@ -1,25 +1,13 @@
 package com.yugen.anime.data.local.entities
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
+import androidx.room.PrimaryKey
 
-@Entity(
-    tableName = "anime_genre_listings",
-    primaryKeys = ["genreId", "animeId"],
-    foreignKeys = [
-        ForeignKey(
-            entity = AnimeEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["animeId"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ],
-    indices = [Index(value = ["animeId"])]
-)
+@Entity(tableName = "anime_genres")
 data class AnimeGenreEntity(
-    val genreId: Int,
-    val genreName: String,
-    val animeId: Int,
-    val position: Int
+    @PrimaryKey val id: Int,
+    val type: String? = null,
+    val name: String = "",
+    val count: Int? = null,
+    val lastUpdated: Long = System.currentTimeMillis()
 )
