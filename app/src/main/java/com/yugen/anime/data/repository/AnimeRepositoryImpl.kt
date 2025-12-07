@@ -50,6 +50,9 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getAnimeGenreById(genreId: Int): Flow<AnimeGenre?> =
+        genreDao.getAnimeGenreById(genreId).map { it.toAnimeGenre() }
+
     override fun getAnimeListByGenreId(genreId: Int): Flow<List<Anime>> =
         animeDao.getAnimeListByGenreId(genreId)
             .map { list -> list.map { it.toAnime() } }

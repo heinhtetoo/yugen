@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.yugen.anime.R
-import com.yugen.anime.domain.model.AnimeGenre
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -19,7 +18,7 @@ sealed interface Route {
     @Serializable
     data object Splash : Route
     @Serializable
-    data object Personalisation : Route
+    data object Onboarding : Route
     @Serializable
     data object HomeGraph : Route
     @Serializable
@@ -49,9 +48,7 @@ class YugenNavigationActions(private val navController: NavHostController) {
 
     fun navigateTo(destination: YugenTopLevelDestination) {
         navController.navigate(destination.route) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            popUpTo<Route.HomeGraph> { saveState = true }
             launchSingleTop = true
             restoreState = true
         }

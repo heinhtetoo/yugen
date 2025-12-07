@@ -11,6 +11,8 @@ interface AnimeRepository {
     fun getAnimeGenres(): Flow<List<AnimeGenre>>
     suspend fun refreshAnimeGenresIfNecessary()
 
+    fun getAnimeGenreById(genreId: Int): Flow<AnimeGenre?>
+
     fun getAnimeListByGenreId(genreId: Int): Flow<List<Anime>>
     suspend fun refreshAnimeListByGenreId(genreId: Int)
 

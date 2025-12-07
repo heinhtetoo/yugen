@@ -13,6 +13,8 @@ import com.yugen.anime.core.ui.theme.YugenTheme
 import com.yugen.anime.domain.model.ThemePreference
 import com.yugen.anime.ui.component.YugenBottomNavigationBar
 import com.yugen.anime.ui.component.currentDestination
+import com.yugen.anime.ui.component.hasRoute
+import com.yugen.anime.ui.navigation.TOP_LEVEL_DESTINATIONS
 import com.yugen.anime.ui.navigation.YugenNavHost
 import com.yugen.anime.ui.navigation.YugenNavigationActions
 import com.yugen.anime.ui.screen.profile.ProfileViewModel
@@ -23,6 +25,8 @@ fun MyApp(profileViewModel: ProfileViewModel = hiltViewModel()) {
     val navActions = remember(navController) { YugenNavigationActions(navController) }
 
     val theme = profileViewModel.theme.collectAsState()
+    val shouldShowBottomBar =
+        TOP_LEVEL_DESTINATIONS.any { currentDestination(navController).hasRoute(it) }
 
     val darkTheme = when (theme.value) {
         ThemePreference.DARK -> true
@@ -33,10 +37,12 @@ fun MyApp(profileViewModel: ProfileViewModel = hiltViewModel()) {
     YugenTheme(darkTheme = darkTheme) {
         Scaffold(
             bottomBar = {
-                YugenBottomNavigationBar(
-                    currentDestination = currentDestination(navController),
-                    navigateToTopLevelDestination = navActions::navigateTo
-                )
+                if (shouldShowBottomBar) {
+                    YugenBottomNavigationBar(
+                        currentDestination = currentDestination(navController),
+                        navigateToTopLevelDestination = navActions::navigateTo
+                    )
+                }
             }
         ) { innerPadding ->
             YugenNavHost(

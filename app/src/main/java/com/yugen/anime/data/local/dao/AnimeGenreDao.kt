@@ -15,6 +15,9 @@ interface AnimeGenreDao {
     @Query("SELECT * FROM anime_genres ORDER BY count DESC")
     fun getAnimeGenres(): Flow<List<AnimeGenreEntity>>
 
+    @Query("SELECT * FROM anime_genres WHERE id = :id")
+    fun getAnimeGenreById(id: Int): Flow<AnimeGenreEntity>
+
     @Query("SELECT COUNT(*) FROM anime_genres")
     suspend fun getGenreCount(): Int
 }

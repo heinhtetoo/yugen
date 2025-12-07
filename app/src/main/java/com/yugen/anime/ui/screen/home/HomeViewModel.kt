@@ -3,7 +3,9 @@ package com.yugen.anime.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yugen.anime.domain.model.Anime
 import com.yugen.anime.domain.repository.AnimeRepository
+import com.yugen.anime.domain.repository.UserPreferencesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
@@ -28,40 +32,34 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            animeRepository.refreshAnimeGenresIfNecessary()
+            userPreferencesRepository.getAnimeGenrePreference().collect { genres ->
+                if (genres.isEmpty()) return@collect
+
+                genres.forEach { genreString ->
+                    animeRepository.getAnimeGenreById(genreString.toInt()).firstOrNull()?.let {
+                        delay(700)
+                        loadListSection(
+                            genreId = it.id,
+                            genreName = it.name,
+                            localFlow = animeRepository.getAnimeListByGenreId(it.id),
+                            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(it.id) }
+                        )
+                    }
+                }
+            }
         }
-        loadListSection(
-            localFlow = animeRepository.getAnimeListByGenreId(1),
-            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(1) },
-            onStateChange = { state -> _uiState.update { it.copy(topAiringAnime = state) } }
-        )
-        loadListSection(
-            localFlow = animeRepository.getAnimeListByGenreId(2),
-            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(2) },
-            onStateChange = { state -> _uiState.update { it.copy(topUpcomingAnime = state) } }
-        )
-        loadListSection(
-            localFlow = animeRepository.getAnimeListByGenreId(42),
-            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(42) },
-            onStateChange = { state -> _uiState.update { it.copy(awardWinningAnime = state) } }
-        )
-        loadListSection(
-            localFlow = animeRepository.getAnimeListByGenreId(10),
-            remoteRefresh = { animeRepository.refreshAnimeListByGenreId(10) },
-            onStateChange = { state -> _uiState.update { it.copy(fantasyAnime = state) } }
-        )
     }
 
-    private fun <T> loadListSection(
-        localFlow: Flow<List<T>>,
-        remoteRefresh: suspend () -> Unit,
-        onStateChange: (ListUiState<T>) -> Unit
+    private fun loadListSection(
+        genreId: Int,
+        genreName: String,
+        localFlow: Flow<List<Anime>>,
+        remoteRefresh: suspend () -> Unit
     ) {
         viewModelScope.launch {
-            delay(600)
             localFlow
                 .onStart {
-                    onStateChange(ListUiState.Loading)
+                    _uiState.update { it.updateSection(genreId, genreName, ListUiState.Loading) }
                     try {
                         remoteRefresh()
                     } catch (_: Exception) {
@@ -73,19 +71,24 @@ class HomeViewModel @Inject constructor(
                         is IOException -> "I/O Error"
                         else -> "Unknown Error"
                     }
-                    onStateChange(
-                        ListUiState.Error(message, e.message ?: "Something went wrong.")
-                    )
+                    _uiState.update {
+                        it.updateSection(
+                            genreId,
+                            genreName,
+                            ListUiState.Error(message, e.message ?: "Something went wrong.")
+                        )
+                    }
                 }
                 .collect { list ->
-                    if (list.isEmpty()) {
-                        onStateChange(
-                            ListUiState.Error(
-                                "No Data", "This section returns an empty list."
-                            )
-                        )
-                    } else {
-                        onStateChange(ListUiState.Success(list))
+                    val state =
+                        if (list.isEmpty()) {
+                            ListUiState.Error("No Data", "This section returns an empty list.")
+                        } else {
+                            ListUiState.Success(list)
+                        }
+
+                    _uiState.update {
+                        it.updateSection(genreId, genreName, state)
                     }
                 }
         }

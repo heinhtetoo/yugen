@@ -46,7 +46,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yugen.anime.R
 import com.yugen.anime.domain.model.Anime
-import com.yugen.anime.domain.model.AnimeGenre
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,8 +102,9 @@ fun HomeBody(
                 contentDescription = stringResource(R.string.app_name),
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.icon_size_2xlarge)),
-                tint = Color.Unspecified
+                tint = Color.Unspecified,
             )
+            Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Filled.Search,
                 contentDescription = stringResource(R.string.search_anime),
@@ -113,40 +113,23 @@ fun HomeBody(
                     .clickable(onClick = onSearchClick)
             )
         }
-        AnimeSection(
-            R.string.top_upcoming_anime,
-            homeUiState.topUpcomingAnime,
-            onSeeMoreClick,
-            onAnimeClick,
-            contentPadding = contentPadding
-        )
-        AnimeSection(
-            R.string.top_airing_anime,
-            homeUiState.topAiringAnime,
-            onSeeMoreClick,
-            onAnimeClick,
-            contentPadding = contentPadding
-        )
-        AnimeSection(
-            R.string.award_winning_anime,
-            homeUiState.awardWinningAnime,
-            onSeeMoreClick,
-            onAnimeClick,
-            contentPadding = contentPadding
-        )
-        AnimeSection(
-            R.string.fantasy_anime,
-            homeUiState.fantasyAnime,
-            onSeeMoreClick,
-            onAnimeClick,
-            contentPadding = contentPadding
-        )
+        homeUiState.sections.forEach { section ->
+            AnimeSection(
+                genreId = section.genreId,
+                genreName = section.genreName,
+                listUiState = section.state,
+                onSeeMoreClick = onSeeMoreClick,
+                onAnimeClick = onAnimeClick,
+                contentPadding = contentPadding
+            )
+        }
     }
 }
 
 @Composable
 fun AnimeSection(
-    titleResId: Int,
+    genreId: Int,
+    genreName: String,
     listUiState: ListUiState<Anime>,
     onSeeMoreClick: (Int) -> Unit,
     onAnimeClick: (Int) -> Unit,
@@ -166,14 +149,13 @@ fun AnimeSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                stringResource(titleResId),
+                genreName,
                 modifier = Modifier.weight(1f),
                 style = MaterialTheme.typography.bodyLarge
             )
             Button(
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
-                // TODO :: Use id from genre object
-                onClick = { onSeeMoreClick(42) }) {
+                onClick = { onSeeMoreClick(genreId) }) {
                 Text(stringResource(R.string.see_more))
             }
         }
@@ -183,7 +165,12 @@ fun AnimeSection(
             is ListUiState.Loading -> Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(dimensionResource(getAnimeHeightDimenResId(titleResId))),
+                    .height(
+                        dimensionResource(
+                            if (genreName == stringResource(R.string.top_airing_anime)) R.dimen.anime_height_large
+                            else R.dimen.anime_height_normal
+                        )
+                    ),
                 Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -193,11 +180,16 @@ fun AnimeSection(
                 listUiState.message, listUiState.details,
                 Modifier
                     .fillMaxWidth()
-                    .height(dimensionResource(getAnimeHeightDimenResId(titleResId)))
+                    .height(
+                        dimensionResource(
+                            if (genreName == stringResource(R.string.top_airing_anime)) R.dimen.anime_height_large
+                            else R.dimen.anime_height_normal
+                        )
+                    )
             )
 
             is ListUiState.Success -> AnimeList(
-                titleResId = titleResId,
+                title = genreName,
                 data = listUiState.data,
                 onAnimeClick = onAnimeClick,
                 contentPadding = contentPadding,
@@ -210,7 +202,7 @@ fun AnimeSection(
 
 @Composable
 fun AnimeList(
-    titleResId: Int,
+    title: String,
     data: List<Anime>,
     onAnimeClick: (Int) -> Unit,
     contentPadding: PaddingValues,
@@ -227,8 +219,14 @@ fun AnimeList(
                 onAnimeClick = { onAnimeClick(anime.id) },
                 modifier = Modifier
                     .size(
-                        dimensionResource(getAnimeWidthDimenResId(titleResId)),
-                        dimensionResource(getAnimeHeightDimenResId(titleResId))
+                        dimensionResource(
+                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_width_large
+                            else R.dimen.anime_width_normal
+                        ),
+                        dimensionResource(
+                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_height_large
+                            else R.dimen.anime_height_normal
+                        )
                     )
                     .padding(dimensionResource(R.dimen.padding_small))
             )
@@ -279,19 +277,31 @@ fun ErrorBody(
     }
 }
 
-private fun getAnimeWidthDimenResId(titleResId: Int) =
-    if (titleResId == R.string.top_airing_anime) R.dimen.anime_width_large
-    else R.dimen.anime_width_normal
-
-private fun getAnimeHeightDimenResId(titleResId: Int) =
-    if (titleResId == R.string.top_airing_anime) R.dimen.anime_height_large
-    else R.dimen.anime_height_normal
+@Preview(showBackground = true)
+@Composable
+private fun HomeBodyPreview() {
+    val animeList = listOf(
+        GenreSectionUiState(
+            genreId = 1,
+            genreName = stringResource(R.string.top_airing_anime),
+            state = ListUiState.Success(
+                listOf(
+                    Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
+                    Anime(2, null, "Title 2", "Status 2", "Synopsis 2"),
+                    Anime(3, null, "Title 3", "Status 3", "Synopsis 3")
+                )
+            )
+        )
+    )
+    HomeBody(HomeUiState(animeList), {}, {}, {}, Modifier.fillMaxSize())
+}
 
 @Preview(showBackground = true)
 @Composable
 private fun AnimeSectionPreview() {
     AnimeSection(
-        titleResId = R.string.top_airing_anime,
+        genreId = 1,
+        genreName = stringResource(R.string.top_airing_anime),
         listUiState = ListUiState.Success(
             listOf(
                 Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
@@ -309,7 +319,7 @@ private fun AnimeSectionPreview() {
 @Composable
 private fun AnimeListPreview() {
     AnimeList(
-        titleResId = R.string.top_airing_anime,
+        title = stringResource(R.string.top_airing_anime),
         listOf(
             Anime(1, null, "Title 1", "Status 1", "Synopsis 1"),
             Anime(2, null, "Title 2", "Status 2", "Synopsis 2"),

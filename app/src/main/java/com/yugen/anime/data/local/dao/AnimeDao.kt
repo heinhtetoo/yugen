@@ -25,7 +25,7 @@ interface AnimeDao {
         LEFT JOIN favourite_anime f ON a.id = f.animeId
         INNER JOIN anime_genre_cross_refs c ON a.id = c.animeId
         WHERE c.genreId = :genreId
-        ORDER BY c.position ASC
+        ORDER BY c.dateAdded ASC
         """
     )
     fun getAnimeListByGenreId(genreId: Int): Flow<List<AnimeEntityWrapper>>

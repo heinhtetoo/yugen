@@ -26,5 +26,6 @@ import androidx.room.Index
 data class AnimeGenreCrossRefEntity(
     val animeId: Int,
     val genreId: Int,
-    val position: Int
+    val position: Int,
+    val dateAdded: Long = System.currentTimeMillis()
 )

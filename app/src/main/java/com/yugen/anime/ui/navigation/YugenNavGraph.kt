@@ -1,32 +1,19 @@
 package com.yugen.anime.ui.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import androidx.navigation.navigation
-import com.yugen.anime.R
 import com.yugen.anime.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.anime.ui.screen.animelist.AnimeListScreen
 import com.yugen.anime.ui.screen.favourite.FavouriteAnimeScreen
 import com.yugen.anime.ui.screen.home.HomeScreen
+import com.yugen.anime.ui.screen.onboarding.OnboardingScreen
 import com.yugen.anime.ui.screen.profile.ProfileScreen
 import com.yugen.anime.ui.screen.search.SearchScreen
-import kotlinx.coroutines.delay
+import com.yugen.anime.ui.screen.splash.SplashScreen
 
 @Composable
 fun YugenNavHost(
@@ -39,30 +26,14 @@ fun YugenNavHost(
         modifier = modifier
     ) {
         composable<Route.Splash> {
-            LaunchedEffect(Unit) {
-                delay(2_000)
-                navController.navigate(Route.Personalisation)
-            }
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = stringResource(R.string.app_name),
-                    modifier = Modifier.size(64.dp)
-                )
-            }
+            SplashScreen(
+                navigateToOnboarding = navController::navigateToOnboarding,
+                navigateToHome = { navController.navigateToHomeGraph(Route.Splash) }
+            )
         }
-        composable<Route.Personalisation> {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Button(onClick = { navController.navigate(Route.HomeGraph) }) {
-                    Text(text = "Start")
-                }
-            }
+        composable<Route.Onboarding> {
+            OnboardingScreen(
+                navigateToHome = { navController.navigateToHomeGraph(Route.Onboarding) })
         }
         navigation<Route.HomeGraph>(
             startDestination = Route.Home
@@ -99,6 +70,24 @@ fun YugenNavHost(
         }
     }
 }
+
+private fun NavHostController.navigateToOnboarding() =
+    navigate(Route.Onboarding) { popUpTo<Route.Splash> { inclusive = true } }
+
+private fun NavHostController.navigateToHomeGraph(route: Route) =
+    when (route) {
+        is Route.Splash -> {
+            navigate(Route.HomeGraph) { popUpTo<Route.Splash> { inclusive = true } }
+        }
+
+        is Route.Onboarding -> {
+            navigate(Route.HomeGraph) { popUpTo<Route.Onboarding> { inclusive = true } }
+        }
+
+        else -> {
+            navigate(Route.HomeGraph)
+        }
+    }
 
 private fun NavHostController.navigateToSearch() =
     navigate((Route.Search))

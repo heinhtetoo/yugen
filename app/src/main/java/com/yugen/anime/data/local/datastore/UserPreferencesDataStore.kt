@@ -1,30 +1,57 @@
 package com.yugen.anime.data.local.datastore
 
 import android.content.Context
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.yugen.anime.domain.model.ThemePreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+object UserPreferencesKeys {
+
+    val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
+    val THEME = stringPreferencesKey("theme")
+    val ANIME_GENRE_IDS = stringSetPreferencesKey("anime_genre_ids")
+}
+
 private val Context.dataStore by preferencesDataStore("user_preferences")
 
 class UserPreferencesDataStore(private val context: Context) {
 
-    companion object {
-        private val THEME_KEY = stringPreferencesKey("theme_mode")
+    val isOnboardingCompleted: Flow<Boolean> =
+        context.dataStore.data.map { preferences ->
+            preferences[UserPreferencesKeys.IS_ONBOARDING_COMPLETED] ?: false
+        }
+
+    suspend fun setOnboardingCompleted(isCompleted: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.IS_ONBOARDING_COMPLETED] = isCompleted
+        }
     }
 
     val themePreference: Flow<ThemePreference> =
         context.dataStore.data.map { preferences ->
-            val name = preferences[THEME_KEY] ?: ThemePreference.SYSTEM.name
+            val name = preferences[UserPreferencesKeys.THEME] ?: ThemePreference.SYSTEM.name
             ThemePreference.valueOf(name)
         }
 
     suspend fun setThemePreference(themePreference: ThemePreference) {
         context.dataStore.edit { preferences ->
-            preferences[THEME_KEY] = themePreference.name
+            preferences[UserPreferencesKeys.THEME] = themePreference.name
+        }
+    }
+
+    val animeGenrePreference: Flow<Set<String>> =
+        context.dataStore.data.map { preferences ->
+            preferences[UserPreferencesKeys.ANIME_GENRE_IDS] ?: emptySet()
+        }
+
+    suspend fun setAnimeGenrePreference(genreIds: Set<String>) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.ANIME_GENRE_IDS] = genreIds
         }
     }
 }
