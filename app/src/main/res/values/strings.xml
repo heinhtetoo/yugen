@@ -1,8 +1,17 @@
 <resources>
-    <string name="app_name">Yugen</string>
+    <string name="app_name">Yūgen</string>
     <string name="back_button">Back</string>
+    <string name="continue_button">Continue</string>
+    <string name="get_started">Get Started</string>
     <string name="home_screen_title">Home</string>
     <string name="favourite_screen_title">Favourite</string>
     <string name="profile_screen_title">Profile</string>
+    <string name="top_airing_anime">Now Airing</string>
+    <string name="top_upcoming_anime">Upcoming</string>
+    <string name="award_winning_anime">Award Winning Anime</string>
+    <string name="anime_section_title_placeholder">Anime</string>
+    <string name="see_all">See all</string>
+    <string name="search_anime">Search Anime…</string>
+    <string name="no_anime_found">No anime found</string>
     <string name="idle">Idle</string>
 </resources>

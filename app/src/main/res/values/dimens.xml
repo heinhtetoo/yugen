@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="padding_2xsmall">2dp</dimen>
+    <dimen name="padding_xsmall">4dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
-    <dimen name="padding_large">32dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_xlarge">32dp</dimen>
+    <dimen name="padding_2xlarge">48dp</dimen>
+
+    <dimen name="anime_width_normal">120dp</dimen>
+    <dimen name="anime_width_large">180dp</dimen>
+
+    <dimen name="anime_height_normal">160dp</dimen>
+    <dimen name="anime_height_large">240dp</dimen>
+
+    <dimen name="icon_size_normal">24dp</dimen>
+    <dimen name="icon_size_large">32dp</dimen>
+    <dimen name="icon_size_xlarge">48dp</dimen>
+    <dimen name="icon_size_2xlarge">56dp</dimen>
+    <dimen name="icon_size_3xlarge">64dp</dimen>
+
+    <dimen name="icon_size_splash">240dp</dimen>
+
+    <dimen name="step_indicator_height">12dp</dimen>
+    <dimen name="step_indicator_width_selected">48dp</dimen>
+    <dimen name="step_indicator_width_unselected">24dp</dimen>
+    
+    <dimen name="theme_option_card_height">80dp</dimen>
+
+    <dimen name="genre_chip_width_min">50dp</dimen>
+    <dimen name="genre_chip_height">40dp</dimen>
 </resources>

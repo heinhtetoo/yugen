@@ -8,17 +8,17 @@ plugins {
 }
 
 android {
-    namespace = "com.yugen.anime"
+    namespace = "com.yugen.animeapp"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.yugen.anime"
+        applicationId = "com.yugen.animeapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.coil.compose)
 
     // Networking
     implementation(libs.retrofit)
@@ -66,6 +65,7 @@ dependencies {
     implementation(libs.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.gson)
 
     // Dependency Injection
     implementation(libs.hilt.android)
@@ -79,6 +79,16 @@ dependencies {
 
     // DataStore (Preferences)
     implementation(libs.androidx.datastore.preferences)
+
+    // Coil (Image Loading)
+    implementation(libs.coil.compose)
+
+    // Paging 3 (Pagination)
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.ktx)
+
+    // Google Fonts
+    implementation(libs.androidx.compose.ui.text.google.fonts)
 
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)
