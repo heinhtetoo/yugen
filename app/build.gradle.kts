@@ -8,13 +8,13 @@ plugins {
 }
 
 android {
-    namespace = "com.yugen.anime"
+    namespace = "com.yugen.animeapp"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.yugen.anime"
+        applicationId = "com.yugen.animeapp"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

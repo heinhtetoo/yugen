@@ -6,11 +6,11 @@
     <string name="home_screen_title">Home</string>
     <string name="favourite_screen_title">Favourite</string>
     <string name="profile_screen_title">Profile</string>
-    <string name="top_airing_anime">Top Airing Anime</string>
-    <string name="top_upcoming_anime">Top Upcoming Anime</string>
-    <string name="award_winning_anime">Award Winning</string>
-    <string name="fantasy_anime">Fantasy</string>
-    <string name="see_more">See more</string>
+    <string name="top_airing_anime">Now Airing</string>
+    <string name="top_upcoming_anime">Upcoming</string>
+    <string name="award_winning_anime">Award Winning Anime</string>
+    <string name="anime_section_title_placeholder">Anime</string>
+    <string name="see_all">See all</string>
     <string name="search_anime">Search Anime…</string>
     <string name="no_anime_found">No anime found</string>
     <string name="idle">Idle</string>
