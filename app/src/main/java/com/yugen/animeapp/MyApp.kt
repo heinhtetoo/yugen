@@ -17,16 +17,14 @@ import com.yugen.animeapp.ui.component.hasRoute
 import com.yugen.animeapp.ui.navigation.TOP_LEVEL_DESTINATIONS
 import com.yugen.animeapp.ui.navigation.YugenNavHost
 import com.yugen.animeapp.ui.navigation.YugenNavigationActions
+import com.yugen.animeapp.ui.navigation.YugenRootNavHost
 import com.yugen.animeapp.ui.screen.profile.ProfileViewModel
 
 @Composable
 fun MyApp(profileViewModel: ProfileViewModel = hiltViewModel()) {
-    val navController = rememberNavController()
-    val navActions = remember(navController) { YugenNavigationActions(navController) }
+    val rootNavController = rememberNavController()
 
     val theme = profileViewModel.theme.collectAsState()
-    val shouldShowBottomBar =
-        TOP_LEVEL_DESTINATIONS.any { currentDestination(navController).hasRoute(it) }
 
     val darkTheme = when (theme.value) {
         ThemePreference.DARK -> true
@@ -35,20 +33,36 @@ fun MyApp(profileViewModel: ProfileViewModel = hiltViewModel()) {
     }
 
     YugenTheme(darkTheme = darkTheme) {
-        Scaffold(
-            bottomBar = {
-                if (shouldShowBottomBar) {
-                    YugenBottomNavigationBar(
-                        currentDestination = currentDestination(navController),
-                        navigateToTopLevelDestination = navActions::navigateTo
-                    )
-                }
-            }
-        ) { innerPadding ->
-            YugenNavHost(
-                navController = navController,
+        Scaffold { innerPadding ->
+            YugenRootNavHost(
+                rootNavController = rootNavController,
                 modifier = Modifier.padding(innerPadding)
             )
         }
+    }
+}
+
+@Composable
+fun MainAppScreen() {
+    val navController = rememberNavController()
+    val navActions = remember(navController) { YugenNavigationActions(navController) }
+
+    val shouldShowBottomBar =
+        TOP_LEVEL_DESTINATIONS.any { currentDestination(navController).hasRoute(it) }
+
+    Scaffold(
+        bottomBar = {
+            if (shouldShowBottomBar) {
+                YugenBottomNavigationBar(
+                    currentDestination = currentDestination(navController),
+                    navigateToTopLevelDestination = navActions::navigateTo
+                )
+            }
+        }
+    ) { innerPadding ->
+        YugenNavHost(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
