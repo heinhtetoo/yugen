@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.yugen.animeapp.MainAppScreen
 import com.yugen.animeapp.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.animeapp.ui.screen.animelist.AnimeListScreen
 import com.yugen.animeapp.ui.screen.favourite.FavouriteAnimeScreen
@@ -16,25 +17,41 @@ import com.yugen.animeapp.ui.screen.search.SearchScreen
 import com.yugen.animeapp.ui.screen.splash.SplashScreen
 
 @Composable
+fun YugenRootNavHost(
+    rootNavController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = rootNavController,
+        startDestination = Route.Splash,
+        modifier = modifier
+    ) {
+        composable<Route.Splash> {
+            SplashScreen(
+                navigateToOnboarding = rootNavController::navigateToOnboarding,
+                navigateToHome = { rootNavController.navigateToMainApp(Route.Splash) }
+            )
+        }
+        composable<Route.Onboarding> {
+            OnboardingScreen(
+                navigateToHome = { rootNavController.navigateToMainApp(Route.Onboarding) })
+        }
+        composable<Route.MainApp> {
+            MainAppScreen()
+        }
+    }
+}
+
+@Composable
 fun YugenNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
-        startDestination = Route.Splash,
+        startDestination = Route.HomeGraph,
         modifier = modifier
     ) {
-        composable<Route.Splash> {
-            SplashScreen(
-                navigateToOnboarding = navController::navigateToOnboarding,
-                navigateToHome = { navController.navigateToHomeGraph(Route.Splash) }
-            )
-        }
-        composable<Route.Onboarding> {
-            OnboardingScreen(
-                navigateToHome = { navController.navigateToHomeGraph(Route.Onboarding) })
-        }
         navigation<Route.HomeGraph>(
             startDestination = Route.Home
         ) {
@@ -74,19 +91,17 @@ fun YugenNavHost(
 private fun NavHostController.navigateToOnboarding() =
     navigate(Route.Onboarding) { popUpTo<Route.Splash> { inclusive = true } }
 
-private fun NavHostController.navigateToHomeGraph(route: Route) =
+private fun NavHostController.navigateToMainApp(route: Route) =
     when (route) {
         is Route.Splash -> {
-            navigate(Route.HomeGraph) { popUpTo<Route.Splash> { inclusive = true } }
+            navigate(Route.MainApp) { popUpTo<Route.Splash> { inclusive = true } }
         }
 
         is Route.Onboarding -> {
-            navigate(Route.HomeGraph) { popUpTo<Route.Onboarding> { inclusive = true } }
+            navigate(Route.MainApp) { popUpTo<Route.Onboarding> { inclusive = true } }
         }
 
-        else -> {
-            navigate(Route.HomeGraph)
-        }
+        else -> null
     }
 
 private fun NavHostController.navigateToSearch() =
