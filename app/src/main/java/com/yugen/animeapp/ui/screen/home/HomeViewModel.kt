@@ -99,7 +99,7 @@ class HomeViewModel @Inject constructor(
         }
 
         homeSections.forEach { section ->
-            delay(700)
+            delay(1000)
 
             when (section) {
                 is HomeSectionConfig.Default -> {

@@ -14,4 +14,22 @@
     <string name="search_anime">Search Anime…</string>
     <string name="no_anime_found">No anime found</string>
     <string name="idle">Idle</string>
+    <string name="anime_backdrop">Anime Backdrop</string>
+    <string name="anime_poster">Anime Poster</string>
+    <string name="dot_separator">•</string>
+    <string name="add_to_favourite">Add to Favourite</string>
+    <string name="remove_from_favourite">Favourite</string>
+    <string name="add_to_library">Add to List</string>
+    <string name="remove_from_library">Remove</string>
+    <string name="planned_to_watch">Planned</string>
+    <string name="watching">Watching</string>
+    <string name="completed">Completed</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="score">Score</string>
+    <string name="scored_by">Score by %1$d</string>
+    <string name="episodes">Episodes</string>
+    <string name="rank">Rank</string>
+    <string name="favourites">Favourites</string>
+    <string name="na">N/A</string>
+    <string name="recommendations">More like this</string>
 </resources>

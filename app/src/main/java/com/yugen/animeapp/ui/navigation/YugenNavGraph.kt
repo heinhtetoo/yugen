@@ -69,7 +69,10 @@ fun YugenNavHost(
                 AnimeListScreen(navigateToAnimeDetails = navController::navigateToHomeAnimeDetails)
             }
             composable<Route.HomeAnimeDetails> {
-                AnimeDetailsScreen()
+                AnimeDetailsScreen(
+                    navigateBack = navController::navigateUp,
+                    navigateToAnimeDetails = navController::navigateToHomeAnimeDetails
+                )
             }
         }
         navigation<Route.FavouriteGraph>(
@@ -79,7 +82,10 @@ fun YugenNavHost(
                 FavouriteAnimeScreen(navigateToAnimeDetails = navController::navigateToFavouriteAnimeDetails)
             }
             composable<Route.FavouriteAnimeDetails> {
-                AnimeDetailsScreen()
+                AnimeDetailsScreen(
+                    navigateBack = navController::navigateUp,
+                    navigateToAnimeDetails = navController::navigateToFavouriteAnimeDetails
+                )
             }
         }
         composable<Route.Profile> {

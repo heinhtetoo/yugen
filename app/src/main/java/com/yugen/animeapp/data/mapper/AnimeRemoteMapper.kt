@@ -6,6 +6,7 @@ import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
 import com.yugen.animeapp.data.remote.model.AnimeDetailsResponse
 import com.yugen.animeapp.data.remote.model.AnimeGenreResponse
 import com.yugen.animeapp.data.remote.model.AnimeResponse
+import com.yugen.animeapp.data.remote.model.EntryResponse
 import com.yugen.animeapp.data.remote.model.ImageResponse
 import com.yugen.animeapp.data.remote.model.ImagesResponse
 import com.yugen.animeapp.domain.model.Anime
@@ -68,7 +69,14 @@ fun AnimeDetailsResponse.toAnimeDetails(): AnimeDetails =
         type = type,
         episodes = episodes,
         status = status,
+        airing = airing,
+        airedFromYear = aired.prop.from.year,
+        airedToYear = aired.prop.to.year,
         rating = rating,
+        score = score,
+        scoredBy = scoredBy,
+        rank = rank,
+        favourites = favourites,
         synopsis = synopsis
     )
 
@@ -82,8 +90,24 @@ fun AnimeDetailsResponse.toAnimeEntity(): AnimeEntity =
         type = type,
         episodes = episodes,
         status = status,
+        airing = airing,
+        airedFromYear = aired.prop.from.year,
+        airedToYear = aired.prop.to.year,
         rating = rating,
+        score = score,
+        scoredBy = scoredBy,
+        rank = rank,
+        favourites = favourites,
         synopsis = synopsis
+    )
+
+fun EntryResponse.toAnime(): Anime =
+    Anime(
+        id = entry.id,
+        images = entry.images.toImages(),
+        title = entry.title,
+        status = "",
+        synopsis = ""
     )
 
 fun ImagesResponse.toImages(): Images =

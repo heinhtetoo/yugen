@@ -24,7 +24,7 @@ fun YugenBottomNavigationBar(
     currentDestination: NavDestination?,
     navigateToTopLevelDestination: (YugenTopLevelDestination) -> Unit
 ) {
-    Log.e("ROUTE", currentDestination.debugPath())
+    //Log.e("ROUTE", currentDestination.debugPath())
     NavigationBar(modifier = Modifier.fillMaxWidth()) {
         TOP_LEVEL_DESTINATIONS.forEach { topLevelDestination ->
             NavigationBarItem(

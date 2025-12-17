@@ -22,7 +22,6 @@ data class YugenTopLevelDestination(
 
 class YugenNavigationActions(private val navController: NavHostController) {
 
-    // TODO :: persist last destination??
     fun navigateTo(destination: YugenTopLevelDestination) {
         navController.navigate(destination.route) {
             popUpTo(navController.graph.findStartDestination().id) { saveState = true }
