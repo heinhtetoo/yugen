@@ -1,6 +1,7 @@
 package com.yugen.animeapp.domain.repository
 
 import androidx.paging.PagingData
+import com.yugen.animeapp.data.local.entities.AnimeEntity
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.AnimeDetails
 import com.yugen.animeapp.domain.model.AnimeGenre
@@ -26,4 +27,6 @@ interface AnimeRepository {
 
     fun getAnimeDetailsById(animeId: Int): Flow<AnimeDetails?>
     suspend fun fetchAnimeDetailsById(animeId: Int)
+
+    suspend fun fetchAnimeRecommendationsById(animeId: Int): List<Anime>
 }

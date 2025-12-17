@@ -21,8 +21,20 @@ data class AnimeDetailsResponse(
     val episodes: Int?,
     @SerialName("status")
     val status: String?,
+    @SerialName("airing")
+    val airing: Boolean,
+    @SerialName("aired")
+    val aired: AiredResponse,
     @SerialName("rating")
     val rating: String?,
+    @SerialName("score")
+    val score: Double?,
+    @SerialName("scored_by")
+    val scoredBy: Int?,
+    @SerialName("rank")
+    val rank: Int?,
+    @SerialName("favorites")
+    val favourites: Int?,
     @SerialName("synopsis")
     val synopsis: String?,
     @SerialName("genres")

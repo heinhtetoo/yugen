@@ -34,7 +34,14 @@ fun AnimeEntityWrapper.toAnimeDetails(): AnimeDetails =
         type = animeEntity.type,
         episodes = animeEntity.episodes,
         status = animeEntity.status,
+        airing = animeEntity.airing,
+        airedFromYear = animeEntity.airedFromYear,
+        airedToYear = animeEntity.airedToYear,
         rating = animeEntity.rating,
+        score = animeEntity.score,
+        scoredBy = animeEntity.scoredBy,
+        rank = animeEntity.rank,
+        favourites = animeEntity.favourites,
         synopsis = animeEntity.synopsis,
         isFavourite = isFavourite
     )

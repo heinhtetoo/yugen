@@ -13,9 +13,16 @@ data class AnimeEntity(
     val titleEnglish: String? = "",
     val titleJapanese: String? = "",
     val status: String? = "",
+    val airing: Boolean = false,
+    val airedFromYear: Int? = null,
+    val airedToYear: Int? = null,
     val type: String? = "",
     val episodes: Int? = 0,
     val rating: String? = "",
+    val score: Double? = 0.0,
+    val scoredBy: Int? = 0,
+    val rank: Int? = 0,
+    val favourites: Int? = 0,
     val synopsis: String? = "",
     val lastUpdated: Long = System.currentTimeMillis()
 )

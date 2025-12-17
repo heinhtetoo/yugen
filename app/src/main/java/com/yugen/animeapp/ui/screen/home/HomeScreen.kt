@@ -189,7 +189,7 @@ fun AnimeSection(
                 modifier = Modifier
                     .height(
                         dimensionResource(
-                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_large
+                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_xlarge
                             else R.dimen.anime_height_normal
                         )
                     )
@@ -202,7 +202,7 @@ fun AnimeSection(
                     .fillMaxWidth()
                     .height(
                         dimensionResource(
-                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_large
+                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_xlarge
                             else R.dimen.anime_height_normal
                         )
                     ),
@@ -217,7 +217,7 @@ fun AnimeSection(
                     .fillMaxWidth()
                     .height(
                         dimensionResource(
-                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_large
+                            if (titleRes == R.string.top_airing_anime) R.dimen.anime_height_xlarge
                             else R.dimen.anime_height_normal
                         )
                     )
@@ -255,11 +255,11 @@ fun AnimeList(
                 modifier = Modifier
                     .size(
                         dimensionResource(
-                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_width_large
+                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_width_xlarge
                             else R.dimen.anime_width_normal
                         ),
                         dimensionResource(
-                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_height_large
+                            if (title == stringResource(R.string.top_airing_anime)) R.dimen.anime_height_xlarge
                             else R.dimen.anime_height_normal
                         )
                     )
@@ -287,7 +287,7 @@ fun AnimeItem(
                 .build(),
             placeholder = painterResource(R.drawable.ic_image_placeholder),
             error = painterResource(R.drawable.ic_image_placeholder),
-            contentDescription = anime.title,
+            contentDescription = stringResource(R.string.anime_poster),
             contentScale = ContentScale.FillHeight,
             modifier = Modifier.fillMaxSize()
         )

@@ -4,6 +4,7 @@ import com.yugen.animeapp.data.remote.model.AnimeResponse
 import com.yugen.animeapp.data.remote.model.AnimeDetailsResponse
 import com.yugen.animeapp.data.remote.model.DataResponse
 import com.yugen.animeapp.data.remote.model.AnimeGenreResponse
+import com.yugen.animeapp.data.remote.model.EntryResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -36,7 +37,12 @@ interface JikanApiService {
     ): DataResponse<List<AnimeResponse>>
 
     @GET("anime/{animeId}")
-    suspend fun getAnimeById(
+    suspend fun fetchAnimeDetailsById(
         @Path("animeId") animeId: Int
     ): DataResponse<AnimeDetailsResponse>
+
+    @GET("anime/{animeId}/recommendations")
+    suspend fun fetchAnimeRecommendationsById(
+        @Path("animeId") animeId: Int
+    ): DataResponse<List<EntryResponse>>
 }

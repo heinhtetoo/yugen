@@ -3,13 +3,17 @@ package com.yugen.animeapp.ui.screen.animedetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.WatchStatus
 import com.yugen.animeapp.domain.repository.AnimeRepository
 import com.yugen.animeapp.domain.repository.FavouriteAnimeRepository
 import com.yugen.animeapp.domain.repository.UserAnimeLibraryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -54,12 +58,18 @@ class AnimeDetailsViewModel @Inject constructor(
             initialValue = AnimeDetailsUiState.Loading
         )
 
+    private val _recommendations = MutableStateFlow<List<Anime>>(emptyList())
+    val recommendations: StateFlow<List<Anime>> = _recommendations.asStateFlow()
+
     init {
         viewModelScope.launch {
-            val local = animeRepository.getAnimeDetailsById(animeId).first()
-            if (local == null || local.episodes == 0) {
-                refreshDetails()
-            }
+//            val local = animeRepository.getAnimeDetailsById(animeId).first()
+//            if (local == null || local.episodes == 0) {
+//                refreshDetails()
+//            }
+            refreshDetails()
+            delay(800)
+            fetchRecommendations()
         }
     }
 
@@ -77,6 +87,13 @@ class AnimeDetailsViewModel @Inject constructor(
         }
     }
 
+    fun fetchRecommendations() {
+        viewModelScope.launch {
+            val recommendations = animeRepository.fetchAnimeRecommendationsById(animeId)
+            _recommendations.value = recommendations
+        }
+    }
+
     fun toggleFavourite() {
         viewModelScope.launch {
             if (isFavourite.value) {
@@ -87,15 +104,10 @@ class AnimeDetailsViewModel @Inject constructor(
         }
     }
 
-    fun updateWatchStatus() {
+    fun updateWatchStatus(watchStatus: WatchStatus) {
         viewModelScope.launch {
             libraryRepository.setAnimeWatchStatus(
-                animeId, when (watchStatus.value) {
-                    null -> WatchStatus.PLAN_TO_WATCH
-                    WatchStatus.PLAN_TO_WATCH -> WatchStatus.WATCHING
-                    WatchStatus.WATCHING -> WatchStatus.COMPLETED
-                    else -> WatchStatus.COMPLETED
-                }
+                animeId, watchStatus
             )
         }
     }

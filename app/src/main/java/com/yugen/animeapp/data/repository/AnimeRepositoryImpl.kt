@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
+import com.yugen.animeapp.data.local.entities.AnimeEntity
 import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
 import com.yugen.animeapp.data.mapper.toAnime
 import com.yugen.animeapp.data.mapper.toAnimeDetails
@@ -16,12 +17,14 @@ import com.yugen.animeapp.data.remote.api.AnimePagingSource
 import com.yugen.animeapp.data.remote.api.JikanApiService
 import com.yugen.animeapp.data.remote.model.AnimeGenreResponse
 import com.yugen.animeapp.data.remote.model.AnimeResponse
+import com.yugen.animeapp.data.remote.model.EntryResponse
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.AnimeDetails
 import com.yugen.animeapp.domain.model.AnimeGenre
 import com.yugen.animeapp.domain.model.DefaultHomeSectionType
 import com.yugen.animeapp.domain.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import java.lang.Exception
 import javax.inject.Inject
@@ -148,9 +151,19 @@ class AnimeRepositoryImpl @Inject constructor(
             .map { entity -> entity?.toAnimeDetails() }
 
     override suspend fun fetchAnimeDetailsById(animeId: Int) {
-        val response = api.getAnimeById(animeId)
+        val response = api.fetchAnimeDetailsById(animeId)
         val details = response.data
 
         details?.let { animeDao.upsertAnime(it.toAnimeEntity()) }
     }
+
+    override suspend fun fetchAnimeRecommendationsById(animeId: Int): List<Anime> =
+        try {
+            val response = api.fetchAnimeRecommendationsById(animeId)
+            val list = response.data?.take(15) ?: emptyList()
+
+            list.map { it.toAnime() }
+        } catch (e: Exception) {
+            emptyList()
+        }
 }
