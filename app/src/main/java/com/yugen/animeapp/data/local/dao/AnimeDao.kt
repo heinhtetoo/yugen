@@ -8,8 +8,8 @@ import androidx.room.Transaction
 import androidx.room.Upsert
 import com.yugen.animeapp.data.local.entities.AnimeGenreCrossRefEntity
 import com.yugen.animeapp.data.local.entities.AnimeEntity
-import com.yugen.animeapp.data.local.entities.AnimeEntityWrapper
 import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
+import com.yugen.animeapp.data.local.model.AnimeItem
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -27,7 +27,7 @@ interface AnimeDao {
         ORDER BY c.dateAdded DESC
         """
     )
-    fun getAnimeListByGenreId(genreId: Int): Flow<List<AnimeEntityWrapper>>
+    fun getAnimeListByGenreId(genreId: Int): Flow<List<AnimeItem>>
 
     @Query(
         """
@@ -40,7 +40,7 @@ interface AnimeDao {
         WHERE a.id = :animeId
         """
     )
-    fun getAnimeDetailsByAnimeId(animeId: Int): Flow<AnimeEntityWrapper?>
+    fun getAnimeDetailsByAnimeId(animeId: Int): Flow<AnimeItem?>
 
     @Upsert
     suspend fun upsertAnime(anime: AnimeEntity)
@@ -56,40 +56,6 @@ interface AnimeDao {
 
     @Query("DELETE FROM anime_genre_cross_refs WHERE animeId = :animeId")
     suspend fun deleteGenreLinksByAnimeId(animeId: Int)
-
-    @Query(
-        """
-        SELECT 
-            a.*
-            ,(f.animeId IS NOT NULL) AS isFavourite
-        FROM anime a
-        INNER JOIN favourite_anime f ON a.id = f.animeId
-        ORDER BY f.dateAdded DESC
-        """
-    )
-    fun getFavouriteAnime(): Flow<List<AnimeEntityWrapper>>
-
-    @Query(
-        """
-        SELECT 
-            DISTINCT a.*
-            ,(f.animeId IS NOT NULL) AS isFavourite
-        FROM anime a
-        INNER JOIN favourite_anime f ON a.id = f.animeId
-        INNER JOIN anime_genre_cross_refs c ON a.id = c.animeId
-        WHERE c.genreId IN (:genreIds)
-        """
-    )
-    fun getFavouriteAnimeByGenreIds(genreIds: List<Int>): Flow<List<AnimeEntityWrapper>>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavouriteAnime(favouriteAnimeEntity: FavouriteAnimeEntity)
-
-    @Query("DELETE FROM favourite_anime WHERE animeId = :animeId")
-    suspend fun deleteFavouriteAnime(animeId: Int)
-
-    @Query("SELECT EXISTS (SELECT 1 FROM favourite_anime WHERE animeId = :animeId)")
-    fun isFavouriteAnime(animeId: Int): Flow<Boolean>
 
     @Transaction
     suspend fun refreshAnimeListWithGenreLinks(

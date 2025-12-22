@@ -70,6 +70,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yugen.animeapp.R
+import com.yugen.animeapp.core.utils.getWatchStatusIcon
+import com.yugen.animeapp.core.utils.getWatchStatusLabelRes
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.AnimeDetails
 import com.yugen.animeapp.domain.model.WatchStatus
@@ -611,20 +613,6 @@ fun ErrorBody(
         Text(message, fontWeight = FontWeight.Bold)
         details?.let { Text(it, maxLines = 2) }
     }
-}
-
-private fun getWatchStatusLabelRes(status: WatchStatus?): Int = when (status) {
-    WatchStatus.PLAN_TO_WATCH -> R.string.planned_to_watch
-    WatchStatus.WATCHING -> R.string.watching
-    WatchStatus.COMPLETED -> R.string.completed
-    null -> R.string.add_to_library
-}
-
-private fun getWatchStatusIcon(status: WatchStatus?): ImageVector = when (status) {
-    WatchStatus.PLAN_TO_WATCH -> Icons.Rounded.DateRange
-    WatchStatus.WATCHING -> Icons.Rounded.PlayCircleFilled
-    WatchStatus.COMPLETED -> Icons.Rounded.CheckCircle
-    null -> Icons.Rounded.AddCircleOutline
 }
 
 @Preview

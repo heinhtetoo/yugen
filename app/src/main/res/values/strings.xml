@@ -4,7 +4,7 @@
     <string name="continue_button">Continue</string>
     <string name="get_started">Get Started</string>
     <string name="home_screen_title">Home</string>
-    <string name="favourite_screen_title">Favourite</string>
+    <string name="library_screen_title">Library</string>
     <string name="profile_screen_title">Profile</string>
     <string name="top_airing_anime">Now Airing</string>
     <string name="top_upcoming_anime">Upcoming</string>

@@ -1,12 +1,10 @@
 package com.yugen.animeapp.di
 
 import com.yugen.animeapp.data.repository.AnimeRepositoryImpl
-import com.yugen.animeapp.data.repository.FavouriteAnimeRepositoryImpl
-import com.yugen.animeapp.data.repository.UserAnimeLibraryRepositoryImpl
+import com.yugen.animeapp.data.repository.LibraryRepositoryImpl
 import com.yugen.animeapp.data.repository.UserPreferencesRepositoryImpl
 import com.yugen.animeapp.domain.repository.AnimeRepository
-import com.yugen.animeapp.domain.repository.FavouriteAnimeRepository
-import com.yugen.animeapp.domain.repository.UserAnimeLibraryRepository
+import com.yugen.animeapp.domain.repository.LibraryRepository
 import com.yugen.animeapp.domain.repository.UserPreferencesRepository
 import dagger.Binds
 import dagger.Module
@@ -24,11 +22,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindFavouriteAnimeRepository(impl: FavouriteAnimeRepositoryImpl): FavouriteAnimeRepository
-
-    @Binds
-    @Singleton
-    abstract fun bindUserAnimeLibraryRepository(impl: UserAnimeLibraryRepositoryImpl): UserAnimeLibraryRepository
+    abstract fun bindLibraryRepository(impl: LibraryRepositoryImpl): LibraryRepository
 
 //    @Binds
 //    @Singleton

@@ -6,8 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.WatchStatus
 import com.yugen.animeapp.domain.repository.AnimeRepository
-import com.yugen.animeapp.domain.repository.FavouriteAnimeRepository
-import com.yugen.animeapp.domain.repository.UserAnimeLibraryRepository
+import com.yugen.animeapp.domain.repository.LibraryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -26,15 +24,14 @@ import javax.inject.Inject
 class AnimeDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val animeRepository: AnimeRepository,
-    private val favouriteAnimeRepository: FavouriteAnimeRepository,
-    private val libraryRepository: UserAnimeLibraryRepository
+    private val libraryRepository: LibraryRepository
 ) : ViewModel() {
 
     private val animeId: Int = savedStateHandle["animeId"]
         ?: error("Missing animeId argument")
 
     val isFavourite: StateFlow<Boolean> =
-        favouriteAnimeRepository.isFavouriteAnime(animeId)
+        libraryRepository.isFavouriteAnime(animeId)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     val watchStatus: StateFlow<WatchStatus?> =
@@ -97,9 +94,9 @@ class AnimeDetailsViewModel @Inject constructor(
     fun toggleFavourite() {
         viewModelScope.launch {
             if (isFavourite.value) {
-                favouriteAnimeRepository.removeFavouriteAnime(animeId)
+                libraryRepository.removeFavouriteAnime(animeId)
             } else {
-                favouriteAnimeRepository.addFavouriteAnime(animeId)
+                libraryRepository.addFavouriteAnime(animeId)
             }
         }
     }
