@@ -1,17 +1,16 @@
 package com.yugen.animeapp.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.LocalLibrary
-import androidx.compose.material.icons.filled.Person2
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.LocalLibrary
 import androidx.compose.material.icons.outlined.Person2
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.LocalLibrary
+import androidx.compose.material.icons.rounded.Person2
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.yugen.animeapp.R
-import kotlinx.serialization.Serializable
 
 data class YugenTopLevelDestination(
     val route: Route,
@@ -34,19 +33,19 @@ class YugenNavigationActions(private val navController: NavHostController) {
 val TOP_LEVEL_DESTINATIONS = listOf(
     YugenTopLevelDestination(
         route = Route.HomeGraph,
-        selectedIcon = Icons.Filled.LocalLibrary,
-        unselectedIcon = Icons.Outlined.LocalLibrary,
+        selectedIcon = Icons.Rounded.Home,
+        unselectedIcon = Icons.Outlined.Home,
         iconTextId = R.string.home_screen_title
     ),
     YugenTopLevelDestination(
-        route = Route.FavouriteGraph,
-        selectedIcon = Icons.Filled.Favorite,
-        unselectedIcon = Icons.Outlined.FavoriteBorder,
-        iconTextId = R.string.favourite_screen_title
+        route = Route.LibraryGraph,
+        selectedIcon = Icons.Rounded.LocalLibrary,
+        unselectedIcon = Icons.Outlined.LocalLibrary,
+        iconTextId = R.string.library_screen_title
     ),
     YugenTopLevelDestination(
         route = Route.Profile,
-        selectedIcon = Icons.Filled.Person2,
+        selectedIcon = Icons.Rounded.Person2,
         unselectedIcon = Icons.Outlined.Person2,
         iconTextId = R.string.profile_screen_title
     )

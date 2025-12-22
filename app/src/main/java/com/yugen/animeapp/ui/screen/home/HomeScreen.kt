@@ -246,6 +246,7 @@ fun AnimeList(
 
     LazyRow(
         modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
         contentPadding = contentPadding
     ) {
         items(data) { anime ->
@@ -263,7 +264,6 @@ fun AnimeList(
                             else R.dimen.anime_height_normal
                         )
                     )
-                    .padding(dimensionResource(R.dimen.padding_small))
             )
         }
     }

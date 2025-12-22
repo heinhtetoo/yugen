@@ -9,7 +9,7 @@ import androidx.navigation.navigation
 import com.yugen.animeapp.MainAppScreen
 import com.yugen.animeapp.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.animeapp.ui.screen.animelist.AnimeListScreen
-import com.yugen.animeapp.ui.screen.favourite.FavouriteAnimeScreen
+import com.yugen.animeapp.ui.screen.library.LibraryScreen
 import com.yugen.animeapp.ui.screen.home.HomeScreen
 import com.yugen.animeapp.ui.screen.onboarding.OnboardingScreen
 import com.yugen.animeapp.ui.screen.profile.ProfileScreen
@@ -75,16 +75,16 @@ fun YugenNavHost(
                 )
             }
         }
-        navigation<Route.FavouriteGraph>(
-            startDestination = Route.Favourite
+        navigation<Route.LibraryGraph>(
+            startDestination = Route.Library
         ) {
-            composable<Route.Favourite> {
-                FavouriteAnimeScreen(navigateToAnimeDetails = navController::navigateToFavouriteAnimeDetails)
+            composable<Route.Library> {
+                LibraryScreen(navigateToAnimeDetails = navController::navigateToLibraryAnimeDetails)
             }
-            composable<Route.FavouriteAnimeDetails> {
+            composable<Route.LibraryAnimeDetails> {
                 AnimeDetailsScreen(
                     navigateBack = navController::navigateUp,
-                    navigateToAnimeDetails = navController::navigateToFavouriteAnimeDetails
+                    navigateToAnimeDetails = navController::navigateToLibraryAnimeDetails
                 )
             }
         }
@@ -119,5 +119,5 @@ private fun NavHostController.navigateToAnimeList(genreId: Int) =
 private fun NavHostController.navigateToHomeAnimeDetails(animeId: Int) =
     navigate((Route.HomeAnimeDetails(animeId)))
 
-private fun NavHostController.navigateToFavouriteAnimeDetails(animeId: Int) =
-    navigate((Route.FavouriteAnimeDetails(animeId)))
+private fun NavHostController.navigateToLibraryAnimeDetails(animeId: Int) =
+    navigate((Route.LibraryAnimeDetails(animeId)))

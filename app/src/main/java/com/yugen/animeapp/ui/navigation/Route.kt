@@ -21,11 +21,11 @@ sealed interface Route {
     @Serializable
     data class HomeAnimeDetails(val animeId: Int) : Route
     @Serializable
-    data object FavouriteGraph : Route
+    data object LibraryGraph : Route
     @Serializable
-    data object Favourite : Route
+    data object Library : Route
     @Serializable
-    data class FavouriteAnimeDetails(val animeId: Int) : Route
+    data class LibraryAnimeDetails(val animeId: Int) : Route
     @Serializable
     data object Profile : Route
 }

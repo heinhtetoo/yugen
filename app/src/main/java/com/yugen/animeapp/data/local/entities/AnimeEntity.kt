@@ -26,8 +26,3 @@ data class AnimeEntity(
     val synopsis: String? = "",
     val lastUpdated: Long = System.currentTimeMillis()
 )
-
-data class AnimeEntityWrapper(
-    @Embedded val animeEntity: AnimeEntity,
-    val isFavourite: Boolean
-)
