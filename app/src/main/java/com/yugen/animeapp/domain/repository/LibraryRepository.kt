@@ -1,6 +1,8 @@
 package com.yugen.animeapp.domain.repository
 
+import com.yugen.animeapp.data.local.model.GenreStat
 import com.yugen.animeapp.data.local.model.LibraryItem
+import com.yugen.animeapp.data.local.model.WatchStatusCount
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.WatchStatus
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +17,6 @@ interface LibraryRepository {
     suspend fun setAnimeWatchStatus(animeId: Int, status: WatchStatus)
     suspend fun removeAnimeFromLibrary(animeId: Int)
     fun getAnimeWatchStatus(animeId: Int): Flow<WatchStatus?>
+    fun getLibraryWatchStatusCounts(): Flow<List<WatchStatusCount>>
+    fun getTopLibraryGenres(): Flow<List<GenreStat>>
 }

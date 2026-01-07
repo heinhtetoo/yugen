@@ -121,19 +121,19 @@ fun ThemeStepScreen(
         )
 
         ThemeOptionCard(
-            title = "Dark Mode",
-            isSelected = selectedTheme == ThemePreference.DARK,
-            onClick = { onThemeSelected(ThemePreference.DARK) }
-        )
-
-        ThemeOptionCard(
-            title = "Light Mode",
+            title = stringResource(R.string.light_mode),
             isSelected = selectedTheme == ThemePreference.LIGHT,
             onClick = { onThemeSelected(ThemePreference.LIGHT) }
         )
 
         ThemeOptionCard(
-            title = "System Default",
+            title = stringResource(R.string.dark_mode),
+            isSelected = selectedTheme == ThemePreference.DARK,
+            onClick = { onThemeSelected(ThemePreference.DARK) }
+        )
+
+        ThemeOptionCard(
+            title = stringResource(R.string.system_default),
             isSelected = selectedTheme == ThemePreference.SYSTEM,
             onClick = { onThemeSelected(ThemePreference.SYSTEM) }
         )
