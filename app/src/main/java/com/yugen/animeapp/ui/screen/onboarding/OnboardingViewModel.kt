@@ -23,8 +23,11 @@ class OnboardingViewModel @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
 
-    var currentStep by mutableStateOf(OnboardingStep.THEME_SELECTION)
+    var currentStep by mutableStateOf(OnboardingStep.USERNAME_SETUP)
         private set
+
+    val username = userPreferencesRepository.getUsernamePreference()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), "")
 
     val selectedTheme = userPreferencesRepository.getThemePreference()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ThemePreference.SYSTEM)
@@ -38,6 +41,12 @@ class OnboardingViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             animeRepository.refreshAnimeGenresIfNecessary()
+        }
+    }
+
+    fun onUsernameChanged(username: String) {
+        viewModelScope.launch {
+            userPreferencesRepository.setUsernamePreference(username)
         }
     }
 
@@ -57,13 +66,16 @@ class OnboardingViewModel @Inject constructor(
 
     fun nextStep() {
         when (currentStep) {
+            OnboardingStep.USERNAME_SETUP -> currentStep = OnboardingStep.THEME_SELECTION
             OnboardingStep.THEME_SELECTION -> currentStep = OnboardingStep.GENRE_SELECTION
             OnboardingStep.GENRE_SELECTION -> finishOnboarding()
         }
     }
 
     fun previousStep() {
-        if (currentStep == OnboardingStep.GENRE_SELECTION)
+        if (currentStep == OnboardingStep.THEME_SELECTION)
+            currentStep = OnboardingStep.USERNAME_SETUP
+        else if (currentStep == OnboardingStep.GENRE_SELECTION)
             currentStep = OnboardingStep.THEME_SELECTION
     }
 

@@ -5,6 +5,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
@@ -36,17 +39,29 @@ import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yugen.animeapp.R
 import com.yugen.animeapp.domain.model.AnimeGenre
@@ -60,19 +75,20 @@ fun OnboardingScreen(
 ) {
 
     val step = onboardingViewModel.currentStep
+    val username by onboardingViewModel.username.collectAsState()
     val selectedTheme by onboardingViewModel.selectedTheme.collectAsState()
     val genreList by onboardingViewModel.genreList.collectAsState()
     val selectedGenreIds by onboardingViewModel.selectedGenreIds.collectAsState()
 
     Scaffold(
         topBar = {
-            StepIndicator(currentStep = step, totalSteps = 2)
+            StepIndicator(currentStep = step, totalSteps = OnboardingStep.entries.size)
         },
         bottomBar = {
             OnboardingBottomBar(
-                isFirstStep = step == OnboardingStep.THEME_SELECTION,
+                isFirstStep = step == OnboardingStep.USERNAME_SETUP,
                 isLastStep = step == OnboardingStep.GENRE_SELECTION,
-                canContinue = if (step == OnboardingStep.GENRE_SELECTION) selectedGenreIds.isNotEmpty() else true,
+                canContinue = if (step == OnboardingStep.USERNAME_SETUP) username.isNotBlank() else if (step == OnboardingStep.GENRE_SELECTION) selectedGenreIds.isNotEmpty() else true,
                 onContinue = {
                     onboardingViewModel.nextStep()
                     if (step == OnboardingStep.GENRE_SELECTION) navigateToHome()
@@ -89,6 +105,11 @@ fun OnboardingScreen(
             label = "OnboardingTransition"
         ) { targetStep ->
             when (targetStep) {
+                OnboardingStep.USERNAME_SETUP -> UsernameStepScreen(
+                    username = username,
+                    onUsernameChanged = onboardingViewModel::onUsernameChanged
+                )
+
                 OnboardingStep.THEME_SELECTION -> ThemeStepScreen(
                     selectedTheme = selectedTheme,
                     onThemeSelected = onboardingViewModel::onThemeSelected
@@ -101,6 +122,77 @@ fun OnboardingScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun UsernameStepScreen(
+    username: String,
+    onUsernameChanged: (String) -> Unit
+) {
+    var tempName by remember(username) { mutableStateOf(username) }
+    val focusRequester = remember { FocusRequester() }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_medium))
+    ) {
+        Text(
+            text = "What should we call you?",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(
+            modifier = Modifier.height(dimensionResource(R.dimen.padding_small))
+        )
+
+        Row(
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Text("Call me", style = MaterialTheme.typography.bodyLarge)
+
+            Spacer(
+                modifier = Modifier.width(dimensionResource(R.dimen.padding_small))
+            )
+
+            Box(modifier = Modifier.weight(1f)) {
+                BasicTextField(
+                    value = tempName,
+                    onValueChange = {
+                        if (it.length <= 20) {
+                            tempName = it
+                            onUsernameChanged(tempName)
+                        }
+                    },
+                    maxLines = 2,
+                    textStyle = MaterialTheme.typography.headlineMedium.copy(
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontWeight = FontWeight.Light,
+                        fontStyle = FontStyle.Italic,
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                    modifier = Modifier.focusRequester(focusRequester)
+                )
+
+                if (tempName.isEmpty()) {
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                            fontWeight = FontWeight.Light,
+                            fontStyle = FontStyle.Italic,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 }
 
@@ -359,6 +451,12 @@ private fun StepIndicatorPreview() {
 @Composable
 private fun OnboardingBottomBarPreview() {
     OnboardingBottomBar(false, true, true, {}, {})
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UsernameStepScreenPreview() {
+    UsernameStepScreen("") { }
 }
 
 @Preview(showBackground = true)
