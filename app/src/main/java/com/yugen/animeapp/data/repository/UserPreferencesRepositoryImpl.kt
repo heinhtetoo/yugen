@@ -16,6 +16,12 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     override suspend fun setIsOnboardingCompleted(isOnboardingCompleted: Boolean) =
         dataStore.setOnboardingCompleted(isOnboardingCompleted)
 
+    override fun getUsernamePreference(): Flow<String> =
+        dataStore.usernamePreference
+
+    override suspend fun setUsernamePreference(username: String) =
+        dataStore.setUsernamePreference(username)
+
     override fun getThemePreference(): Flow<ThemePreference> =
         dataStore.themePreference
 
@@ -31,6 +37,7 @@ class UserPreferencesRepositoryImpl @Inject constructor(
     override suspend fun resetOnboardingPreferences() {
         setAnimeGenrePreference(emptySet())
         setThemePreference(ThemePreference.SYSTEM)
+        setUsernamePreference("")
         setIsOnboardingCompleted(false)
     }
 }

@@ -3,6 +3,13 @@
     <string name="back_button">Back</string>
     <string name="continue_button">Continue</string>
     <string name="get_started">Get Started</string>
+    <string name="save">Save</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="edit_name">Edit Name</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="system_default">System Default</string>
     <string name="home_screen_title">Home</string>
     <string name="library_screen_title">Library</string>
     <string name="profile_screen_title">Profile</string>
@@ -32,4 +39,10 @@
     <string name="favourites">Favourites</string>
     <string name="na">N/A</string>
     <string name="recommendations">More like this</string>
+
+    <string name="avatar">Avatar</string>
+    <string name="avatar_unknown">Unknown</string>
+    <string name="avatar_lvl1">Novice Watcher</string>
+    <string name="avatar_lvl2">Dedicated Viewer</string>
+    <string name="avatar_lvl3">Anime Sage</string>
 </resources>

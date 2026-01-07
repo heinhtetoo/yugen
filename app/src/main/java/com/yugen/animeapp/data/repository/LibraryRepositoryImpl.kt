@@ -3,7 +3,9 @@ package com.yugen.animeapp.data.repository
 import com.yugen.animeapp.data.local.dao.LibraryDao
 import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
 import com.yugen.animeapp.data.local.entities.UserAnimeLibraryEntity
+import com.yugen.animeapp.data.local.model.GenreStat
 import com.yugen.animeapp.data.local.model.LibraryItem
+import com.yugen.animeapp.data.local.model.WatchStatusCount
 import com.yugen.animeapp.data.mapper.toAnime
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.WatchStatus
@@ -48,4 +50,10 @@ class LibraryRepositoryImpl @Inject constructor(
 
     override fun getAnimeWatchStatus(animeId: Int): Flow<WatchStatus?> =
         libraryDao.getAnimeWatchStatus(animeId)
+
+    override fun getLibraryWatchStatusCounts(): Flow<List<WatchStatusCount>> =
+        libraryDao.getWatchStatusCounts()
+
+    override fun getTopLibraryGenres(): Flow<List<GenreStat>> =
+        libraryDao.getTopGenresInLibrary()
 }

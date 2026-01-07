@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.map
 object UserPreferencesKeys {
 
     val IS_ONBOARDING_COMPLETED = booleanPreferencesKey("is_onboarding_completed")
+    val USERNAME = stringPreferencesKey("username")
     val THEME = stringPreferencesKey("theme")
     val ANIME_GENRE_IDS = stringSetPreferencesKey("anime_genre_ids")
 }
@@ -29,6 +30,17 @@ class UserPreferencesDataStore(private val context: Context) {
     suspend fun setOnboardingCompleted(isCompleted: Boolean) {
         context.dataStore.edit { preferences ->
             preferences[UserPreferencesKeys.IS_ONBOARDING_COMPLETED] = isCompleted
+        }
+    }
+
+    val usernamePreference: Flow<String> =
+        context.dataStore.data.map { preferences ->
+            preferences[UserPreferencesKeys.USERNAME] ?: ""
+        }
+
+    suspend fun setUsernamePreference(username: String) {
+        context.dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.USERNAME] = username
         }
     }
 

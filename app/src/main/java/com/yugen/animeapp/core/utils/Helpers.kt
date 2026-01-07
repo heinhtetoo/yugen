@@ -10,6 +10,20 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.yugen.animeapp.R
 import com.yugen.animeapp.domain.model.WatchStatus
 
+fun getAvatarDrawableRes(animeCount: Int): Int = when {
+    animeCount >= AVATAR_THRESHOLD_LVL3 -> R.drawable.avatar_lvl3
+    animeCount >= AVATAR_THRESHOLD_LVL2 -> R.drawable.avatar_lvl2
+    animeCount >= AVATAR_THRESHOLD_LVL1 -> R.drawable.avatar_lvl1
+    else -> R.drawable.ic_yugen_greyscale_24
+}
+
+fun getAvatarStringRes(animeCount: Int): Int = when {
+    animeCount >= AVATAR_THRESHOLD_LVL3 -> R.string.avatar_lvl3
+    animeCount >= AVATAR_THRESHOLD_LVL2 -> R.string.avatar_lvl2
+    animeCount >= AVATAR_THRESHOLD_LVL1 -> R.string.avatar_lvl1
+    else -> R.string.avatar_unknown
+}
+
 fun getWatchStatusLabelRes(status: WatchStatus?): Int = when (status) {
     WatchStatus.PLAN_TO_WATCH -> R.string.planned_to_watch
     WatchStatus.WATCHING -> R.string.watching
