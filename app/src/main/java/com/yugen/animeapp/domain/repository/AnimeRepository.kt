@@ -23,7 +23,17 @@ interface AnimeRepository {
 
     fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>>
 
-    fun searchPagedAnime(genreId: Int? = null, query: String): Flow<PagingData<Anime>>
+    fun searchPagedAnime(
+        genreId: Int? = null,
+        type: String? = null,
+        status: String? = null,
+        query: String
+    ): Flow<PagingData<Anime>>
+
+    fun getRecentSearches(): Flow<List<String>>
+    suspend fun addSearchToHistory(query: String)
+    suspend fun removeSearchFromHistory(query: String)
+    suspend fun clearAllSearches()
 
     fun getAnimeDetailsById(animeId: Int): Flow<AnimeDetails?>
     suspend fun fetchAnimeDetailsById(animeId: Int)

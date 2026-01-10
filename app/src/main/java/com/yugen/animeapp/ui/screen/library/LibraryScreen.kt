@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -188,7 +189,7 @@ fun LibraryAnimeList(
             columns = GridCells.Adaptive(minSize = dimensionResource(R.dimen.anime_width_small)),
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
         ) {
             items(data) { anime ->
                 AnimeItem(
@@ -206,9 +207,9 @@ fun AnimeItem(
     onAnimeClick: (Anime) -> Unit
 ) {
     Box(
-        modifier = Modifier.size(
-            width = dimensionResource(R.dimen.anime_width_small),
-            height = dimensionResource(R.dimen.anime_height_small)
+        modifier = Modifier.aspectRatio(
+            dimensionResource(R.dimen.anime_width_normal).value
+                    / dimensionResource(R.dimen.anime_height_normal).value
         )
     ) {
         Card(

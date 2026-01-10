@@ -107,7 +107,6 @@ fun AnimeDetailsScreen(
             onRecommendationClick = navigateToAnimeDetails,
             paddingValues = paddingValues
         )
-
     }
 }
 

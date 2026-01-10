@@ -62,14 +62,13 @@ fun AnimeListBody(
 ) {
     Column(
         modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(3),
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_medium)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
             modifier = Modifier.fillMaxWidth()
         ) {
             items(
@@ -84,11 +83,9 @@ fun AnimeListBody(
                         onAnimeClick = { onAnimeClick(it.id) },
                         modifier = Modifier
                             .aspectRatio(
-                                dimensionResource(R.dimen.anime_width_normal)
-                                    .value / dimensionResource(R.dimen.anime_height_normal)
-                                    .value
+                                dimensionResource(R.dimen.anime_width_normal).value
+                                        / dimensionResource(R.dimen.anime_height_normal).value
                             )
-                            .padding(dimensionResource(R.dimen.padding_small))
                     )
                 }
             }

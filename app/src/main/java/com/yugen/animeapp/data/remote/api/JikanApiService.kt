@@ -33,6 +33,8 @@ interface JikanApiService {
     @GET("anime")
     suspend fun searchAnime(
         @Query("q") query: String,
+        @Query("type") type: String? = null,
+        @Query("status") status: String? = null,
         @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 

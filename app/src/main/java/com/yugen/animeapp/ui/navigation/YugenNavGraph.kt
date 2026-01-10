@@ -63,7 +63,10 @@ fun YugenNavHost(
                 )
             }
             composable<Route.Search> {
-                SearchScreen(navigateToAnimeDetails = navController::navigateToHomeAnimeDetails)
+                SearchScreen(
+                    navigateBack = navController::navigateUp,
+                    navigateToAnimeDetails = navController::navigateToHomeAnimeDetails
+                )
             }
             composable<Route.AnimeList> {
                 AnimeListScreen(navigateToAnimeDetails = navController::navigateToHomeAnimeDetails)
