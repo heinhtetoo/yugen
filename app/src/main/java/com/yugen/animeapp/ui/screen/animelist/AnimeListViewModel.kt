@@ -19,6 +19,7 @@ class AnimeListViewModel @Inject constructor(
 
     val genreId: Int = savedStateHandle["genreId"]
         ?: error(("Missing genreId argument"))
+    val title: String? = savedStateHandle["title"]
 
     val pagedAnime: Flow<PagingData<Anime>> = animeRepository.getPagedAnimeListByGenreId(genreId)
         .cachedIn(viewModelScope)
