@@ -64,6 +64,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.yugen.animeapp.R
+import com.yugen.animeapp.core.utils.USERNAME_CHARACTER_LIMIT
 import com.yugen.animeapp.domain.model.AnimeGenre
 import com.yugen.animeapp.domain.model.OnboardingStep
 import com.yugen.animeapp.domain.model.ThemePreference
@@ -160,7 +161,7 @@ fun UsernameStepScreen(
                 BasicTextField(
                     value = tempName,
                     onValueChange = {
-                        if (it.length <= 20) {
+                        if (it.length <= USERNAME_CHARACTER_LIMIT) {
                             tempName = it
                             onUsernameChanged(tempName)
                         }

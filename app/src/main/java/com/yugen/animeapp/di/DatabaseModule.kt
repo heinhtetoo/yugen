@@ -6,6 +6,7 @@ import com.yugen.animeapp.data.local.YugenDatabase
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
 import com.yugen.animeapp.data.local.dao.LibraryDao
+import com.yugen.animeapp.data.local.dao.SearchHistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,6 +32,9 @@ object DatabaseModule {
 
     @Provides
     fun provideAnimeGenreDao(db: YugenDatabase): AnimeGenreDao = db.animeGenreDao()
+
+    @Provides
+    fun provideSearchHistoryDao(db: YugenDatabase): SearchHistoryDao = db.searchHistoryDao()
 
 //    @Provides
 //    fun provideFavouriteAnimeDao(db: YugenDatabase): FavouriteAnimeDao = db.favouriteAnimeDao()

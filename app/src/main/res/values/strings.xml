@@ -19,6 +19,9 @@
     <string name="anime_section_title_placeholder">Anime</string>
     <string name="see_all">See all</string>
     <string name="search_anime">Search Anime…</string>
+    <string name="clear">Clear</string>
+    <string name="recent_searches">Recent Searches</string>
+    <string name="delete">Delete</string>
     <string name="no_anime_found">No anime found</string>
     <string name="idle">Idle</string>
     <string name="anime_backdrop">Anime Backdrop</string>

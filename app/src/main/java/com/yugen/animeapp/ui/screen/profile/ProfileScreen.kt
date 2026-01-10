@@ -66,6 +66,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yugen.animeapp.R
+import com.yugen.animeapp.core.utils.USERNAME_CHARACTER_LIMIT
 import com.yugen.animeapp.core.utils.getAvatarDrawableRes
 import com.yugen.animeapp.core.utils.getAvatarStringRes
 import com.yugen.animeapp.core.utils.getWatchStatusColour
@@ -217,7 +218,7 @@ fun ProfileHeader(username: String, totalAnime: Int, onUsernameChanged: (String)
 
                 BasicTextField(
                     value = tempName,
-                    onValueChange = { if (it.length <= 20) tempName = it },
+                    onValueChange = { if (it.length <= USERNAME_CHARACTER_LIMIT) tempName = it },
                     singleLine = true,
                     textStyle = MaterialTheme.typography.headlineSmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,

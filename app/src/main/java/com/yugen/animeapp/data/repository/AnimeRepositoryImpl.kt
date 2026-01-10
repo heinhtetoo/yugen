@@ -5,8 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
+import com.yugen.animeapp.data.local.dao.SearchHistoryDao
 import com.yugen.animeapp.data.local.entities.AnimeEntity
 import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entities.SearchHistoryEntity
 import com.yugen.animeapp.data.mapper.toAnime
 import com.yugen.animeapp.data.mapper.toAnimeDetails
 import com.yugen.animeapp.data.mapper.toAnimeEntity
@@ -32,7 +34,8 @@ import javax.inject.Inject
 class AnimeRepositoryImpl @Inject constructor(
     private val api: JikanApiService,
     private val animeDao: AnimeDao,
-    private val genreDao: AnimeGenreDao
+    private val genreDao: AnimeGenreDao,
+    private val searchDao: SearchHistoryDao
 ) : AnimeRepository {
 
     override fun getAnimeGenres(): Flow<List<AnimeGenre>> =
@@ -136,15 +139,40 @@ class AnimeRepositoryImpl @Inject constructor(
             pagingSourceFactory = { AnimePagingSource(api, genreId) }
         ).flow
 
-    override fun searchPagedAnime(genreId: Int?, query: String): Flow<PagingData<Anime>> =
+    override fun searchPagedAnime(
+        genreId: Int?,
+        type: String?,
+        status: String?,
+        query: String
+    ): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
                 prefetchDistance = 2,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { AnimePagingSource(api, genreId, query) }
+            pagingSourceFactory = {
+                AnimePagingSource(
+                    api,
+                    animeGenreId = genreId,
+                    searchQuery = query,
+                    animeType = type,
+                    animeStatus = status
+                )
+            }
         ).flow
+
+    override fun getRecentSearches(): Flow<List<String>> =
+        searchDao.getRecentSearches().map { list -> list.map { it.query } }
+
+    override suspend fun addSearchToHistory(query: String) =
+        searchDao.insertSearch(SearchHistoryEntity(query))
+
+    override suspend fun removeSearchFromHistory(query: String) =
+        searchDao.deleteSearch(query)
+
+    override suspend fun clearAllSearches() =
+        searchDao.clearAll()
 
     override fun getAnimeDetailsById(animeId: Int): Flow<AnimeDetails?> =
         animeDao.getAnimeDetailsByAnimeId(animeId)
