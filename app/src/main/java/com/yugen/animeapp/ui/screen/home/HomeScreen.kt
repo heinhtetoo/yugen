@@ -17,9 +17,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.automirrored.rounded.ArrowRight
-import androidx.compose.material.icons.automirrored.rounded.Forward
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -55,7 +52,7 @@ import com.yugen.animeapp.domain.model.Anime
 @Composable
 fun HomeScreen(
     navigateToSearch: () -> Unit,
-    navigateToAnimeList: (Int) -> Unit,
+    navigateToAnimeList: (Int, String) -> Unit,
     navigateToAnimeDetails: (Int) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = hiltViewModel()
@@ -78,7 +75,7 @@ fun HomeScreen(
 fun HomeBody(
     homeUiState: HomeUiState,
     onSearchClick: () -> Unit,
-    onSeeMoreClick: (Int) -> Unit,
+    onSeeMoreClick: (Int, String) -> Unit,
     onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
@@ -94,6 +91,7 @@ fun HomeBody(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(dimensionResource(R.dimen.top_app_bar_height))
                 .padding(
                     horizontal = dimensionResource(R.dimen.padding_medium),
                     vertical = dimensionResource(R.dimen.padding_small)
@@ -143,7 +141,7 @@ fun AnimeSection(
     genreName: String?,
     titleRes: Int?,
     listUiState: ListUiState<Anime>,
-    onSeeMoreClick: (Int) -> Unit,
+    onSeeMoreClick: (Int, String) -> Unit,
     onAnimeClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
@@ -173,7 +171,7 @@ fun AnimeSection(
             if (genreId >= 0) {
                 TextButton(
                     modifier = Modifier.padding(start = dimensionResource(R.dimen.padding_small)),
-                    onClick = { onSeeMoreClick(genreId) }) {
+                    onClick = { onSeeMoreClick(genreId, title) }) {
                     Text(
                         stringResource(R.string.see_all),
                         style = MaterialTheme.typography.labelLarge
@@ -329,7 +327,7 @@ private fun HomeBodyAnimePreview() {
             )
         )
     )
-    HomeBody(HomeUiState(animeList), {}, {}, {}, Modifier.fillMaxSize())
+    HomeBody(HomeUiState(animeList), {}, { _, _ -> }, {}, Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true)
@@ -343,7 +341,7 @@ private fun HomeBodyIdlePreview() {
             state = ListUiState.Idle
         )
     )
-    HomeBody(HomeUiState(animeList), {}, {}, {}, Modifier.fillMaxSize())
+    HomeBody(HomeUiState(animeList), {}, { _, _ -> }, {}, Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true)
@@ -357,7 +355,7 @@ private fun HomeBodyLoadingPreview() {
             state = ListUiState.Loading
         )
     )
-    HomeBody(HomeUiState(animeList), {}, {}, {}, Modifier.fillMaxSize())
+    HomeBody(HomeUiState(animeList), {}, { _, _ -> }, {}, Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true)
@@ -371,7 +369,7 @@ private fun HomeBodyErrorPreview() {
             state = ListUiState.Error("Error", "Details")
         )
     )
-    HomeBody(HomeUiState(animeList), {}, {}, {}, Modifier.fillMaxSize())
+    HomeBody(HomeUiState(animeList), {}, { _, _ -> }, {}, Modifier.fillMaxSize())
 }
 
 @Preview(showBackground = true)
@@ -388,7 +386,7 @@ private fun AnimeSectionPreview() {
                 Anime(3, null, "Title 3", "Status 3", "Synopsis 3")
             )
         ),
-        onSeeMoreClick = { _ -> },
+        onSeeMoreClick = { _, _ -> },
         onAnimeClick = { _ -> },
         contentPadding = PaddingValues(32.dp)
     )

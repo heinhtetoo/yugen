@@ -232,9 +232,12 @@ fun ProfileHeader(username: String, totalAnime: Int, onUsernameChanged: (String)
                                 .border(
                                     width = 1.dp,
                                     color = MaterialTheme.colorScheme.primary,
-                                    shape = RoundedCornerShape(12.dp)
+                                    shape = RoundedCornerShape(dimensionResource(R.dimen.rounded_corner_shape_normal))
                                 )
-                                .padding(horizontal = 4.dp, vertical = 2.dp),
+                                .padding(
+                                    horizontal = dimensionResource(R.dimen.padding_xsmall),
+                                    vertical = dimensionResource(R.dimen.padding_2xsmall)
+                                ),
                             contentAlignment = Alignment.Center
                         ) {
                             innerTextField()

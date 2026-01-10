@@ -69,7 +69,10 @@ fun YugenNavHost(
                 )
             }
             composable<Route.AnimeList> {
-                AnimeListScreen(navigateToAnimeDetails = navController::navigateToHomeAnimeDetails)
+                AnimeListScreen(
+                    navigateBack = navController::navigateUp,
+                    navigateToAnimeDetails = navController::navigateToHomeAnimeDetails
+                )
             }
             composable<Route.HomeAnimeDetails> {
                 AnimeDetailsScreen(
@@ -116,8 +119,8 @@ private fun NavHostController.navigateToMainApp(route: Route) =
 private fun NavHostController.navigateToSearch() =
     navigate((Route.Search))
 
-private fun NavHostController.navigateToAnimeList(genreId: Int) =
-    navigate((Route.AnimeList(genreId)))
+private fun NavHostController.navigateToAnimeList(genreId: Int, title: String) =
+    navigate((Route.AnimeList(genreId, title)))
 
 private fun NavHostController.navigateToHomeAnimeDetails(animeId: Int) =
     navigate((Route.HomeAnimeDetails(animeId)))

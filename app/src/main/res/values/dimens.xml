@@ -48,4 +48,6 @@
     <dimen name="rounded_corner_shape_normal">12dp</dimen>
     <dimen name="rounded_corner_shape_large">16dp</dimen>
     <dimen name="rounded_corner_shape_xlarge">20dp</dimen>
+
+    <dimen name="top_app_bar_height">56dp</dimen>
 </resources>
