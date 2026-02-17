@@ -19,6 +19,7 @@ interface JikanApiService {
     @GET("top/anime")
     suspend fun fetchTopAnimeByFilterEnum(
         @Query("filter") filter: String,
+        @Query("sfw") sfw: Boolean = true,
         @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 
@@ -27,6 +28,7 @@ interface JikanApiService {
         @Query("genres") genreId: Int,
         @Query("order_by") orderBy: String = "popularity",
         @Query("sort") sort: String = "asc",
+        @Query("sfw") sfw: Boolean = true,
         @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 
@@ -35,6 +37,7 @@ interface JikanApiService {
         @Query("q") query: String,
         @Query("type") type: String? = null,
         @Query("status") status: String? = null,
+        @Query("sfw") sfw: Boolean = true,
         @Query("page") page: Int
     ): DataResponse<List<AnimeResponse>>
 
