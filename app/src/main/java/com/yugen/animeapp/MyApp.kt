@@ -36,7 +36,7 @@ fun MyApp(profileViewModel: ProfileViewModel = hiltViewModel()) {
         Scaffold { innerPadding ->
             YugenRootNavHost(
                 rootNavController = rootNavController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
             )
         }
     }
