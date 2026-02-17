@@ -17,8 +17,8 @@ android {
         applicationId = "com.yugen.animeapp"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0-internal"
+        versionCode = 2
+        versionName = "1.0.1-internal"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
