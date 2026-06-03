@@ -2,6 +2,11 @@ package com.yugen.animeapp
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,6 +19,7 @@ import com.yugen.animeapp.domain.model.ThemePreference
 import com.yugen.animeapp.ui.component.YugenBottomNavigationBar
 import com.yugen.animeapp.ui.component.currentDestination
 import com.yugen.animeapp.ui.component.hasRoute
+import com.yugen.animeapp.ui.navigation.Route
 import com.yugen.animeapp.ui.navigation.TOP_LEVEL_DESTINATIONS
 import com.yugen.animeapp.ui.navigation.YugenNavHost
 import com.yugen.animeapp.ui.navigation.YugenNavigationActions
@@ -57,6 +63,16 @@ fun MainAppScreen() {
                     currentDestination = currentDestination(navController),
                     navigateToTopLevelDestination = navActions::navigateTo
                 )
+            }
+        },
+        floatingActionButton = {
+            if (shouldShowBottomBar) {
+                FloatingActionButton(
+                    onClick = { navController.navigate(Route.AiChat) },
+                    containerColor = MaterialTheme.colorScheme.tertiaryContainer
+                ) {
+                    Icon(Icons.Rounded.AutoAwesome, contentDescription = "AI Chat")
+                }
             }
         }
     ) { innerPadding ->

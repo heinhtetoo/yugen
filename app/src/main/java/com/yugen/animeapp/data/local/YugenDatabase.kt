@@ -8,11 +8,13 @@ import androidx.room.TypeConverters
 import com.yugen.animeapp.core.utils.Converters
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
+import com.yugen.animeapp.data.local.dao.ChatDao
 import com.yugen.animeapp.data.local.dao.LibraryDao
 import com.yugen.animeapp.data.local.dao.SearchHistoryDao
 import com.yugen.animeapp.data.local.entities.AnimeEntity
 import com.yugen.animeapp.data.local.entities.AnimeGenreCrossRefEntity
 import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entities.ChatMessageEntity
 import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
 import com.yugen.animeapp.data.local.entities.SearchHistoryEntity
 import com.yugen.animeapp.data.local.entities.UserAnimeLibraryEntity
@@ -24,9 +26,10 @@ import com.yugen.animeapp.data.local.entities.UserAnimeLibraryEntity
         AnimeGenreCrossRefEntity::class,
         FavouriteAnimeEntity::class,
         UserAnimeLibraryEntity::class,
-        SearchHistoryEntity::class
+        SearchHistoryEntity::class,
+        ChatMessageEntity::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -38,6 +41,7 @@ abstract class YugenDatabase : RoomDatabase() {
 
     //    abstract fun favouriteAnimeDao(): FavouriteAnimeDao
     abstract fun userAnimeLibraryDao(): LibraryDao
+    abstract fun chatDao(): ChatDao
 
     companion object {
 

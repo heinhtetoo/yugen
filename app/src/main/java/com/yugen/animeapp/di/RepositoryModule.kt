@@ -1,9 +1,11 @@
 package com.yugen.animeapp.di
 
 import com.yugen.animeapp.data.repository.AnimeRepositoryImpl
+import com.yugen.animeapp.data.repository.ChatRepositoryImpl
 import com.yugen.animeapp.data.repository.LibraryRepositoryImpl
 import com.yugen.animeapp.data.repository.UserPreferencesRepositoryImpl
 import com.yugen.animeapp.domain.repository.AnimeRepository
+import com.yugen.animeapp.domain.repository.ChatRepository
 import com.yugen.animeapp.domain.repository.LibraryRepository
 import com.yugen.animeapp.domain.repository.UserPreferencesRepository
 import dagger.Binds
@@ -27,6 +29,10 @@ abstract class RepositoryModule {
 //    @Binds
 //    @Singleton
 //    abstract fun bindJikanRepository(jikanRepositoryImpl: JikanRepositoryImpl): JikanRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindChatRepository(impl: ChatRepositoryImpl): ChatRepository
 
     @Binds
     @Singleton

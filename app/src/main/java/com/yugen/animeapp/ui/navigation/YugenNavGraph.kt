@@ -9,6 +9,7 @@ import androidx.navigation.navigation
 import com.yugen.animeapp.MainAppScreen
 import com.yugen.animeapp.ui.screen.animedetails.AnimeDetailsScreen
 import com.yugen.animeapp.ui.screen.animelist.AnimeListScreen
+import com.yugen.animeapp.ui.screen.chat.ChatScreen
 import com.yugen.animeapp.ui.screen.library.LibraryScreen
 import com.yugen.animeapp.ui.screen.home.HomeScreen
 import com.yugen.animeapp.ui.screen.onboarding.OnboardingScreen
@@ -96,6 +97,9 @@ fun YugenNavHost(
         }
         composable<Route.Profile> {
             ProfileScreen()
+        }
+        composable<Route.AiChat> {
+            ChatScreen(navigateBack = { navController.popBackStack() })
         }
     }
 }
