@@ -49,8 +49,6 @@ class ChatRepositoryImpl @Inject constructor(
 
         if (chatSession == null) initSession()
 
-        Log.e("ERR", BuildConfig.GEMINI_API_KEY)
-
         try {
             val responseStream = chatSession!!.sendMessageStream(userMessage)
 
@@ -70,7 +68,8 @@ class ChatRepositoryImpl @Inject constructor(
             )
         } catch (e: Exception) {
             emit("Error: ${e.localizedMessage}")
-            Log.e("ERR", "Error: ${e.localizedMessage}")
+            Log.e("ChatRepositoryImpl", "Error during message send: ${e.localizedMessage}", e)
+            chatSession = null  // Reset session so it re-initialises on next message
             chatDao.insertMessage(
                 ChatMessageEntity(
                     text = "Sorry, I encountered an error.",
@@ -82,4 +81,8 @@ class ChatRepositoryImpl @Inject constructor(
     }
 
     override suspend fun clearHistory() = chatDao.clearHistory()
+
+    override suspend fun resetSession() {
+        chatSession = null
+    }
 }
