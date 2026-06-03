@@ -1,11 +1,13 @@
 package com.yugen.animeapp.data.mapper
 
 import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entities.ChatMessageEntity
 import com.yugen.animeapp.data.local.model.AnimeItem
 import com.yugen.animeapp.data.local.model.LibraryItem
 import com.yugen.animeapp.domain.model.Anime
 import com.yugen.animeapp.domain.model.AnimeDetails
 import com.yugen.animeapp.domain.model.AnimeGenre
+import com.yugen.animeapp.domain.model.ChatMessage
 
 fun AnimeGenreEntity.toAnimeGenre(): AnimeGenre =
     AnimeGenre(
@@ -77,4 +79,13 @@ fun LibraryItem.toAnimeDetails(): AnimeDetails =
         favourites = animeEntity.favourites,
         synopsis = animeEntity.synopsis,
         isFavourite = isFavourite
+    )
+
+fun ChatMessageEntity.toChatMessage(): ChatMessage =
+    ChatMessage(
+        id = id,
+        text = text,
+        isUser = isUser,
+        timestamp = timestamp,
+        isError = isError
     )

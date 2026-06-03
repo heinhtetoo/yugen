@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.yugen.animeapp.data.local.YugenDatabase
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
+import com.yugen.animeapp.data.local.dao.ChatDao
 import com.yugen.animeapp.data.local.dao.LibraryDao
 import com.yugen.animeapp.data.local.dao.SearchHistoryDao
 import dagger.Module
@@ -41,4 +42,7 @@ object DatabaseModule {
 
     @Provides
     fun provideUserAnimeLibraryDao(db: YugenDatabase): LibraryDao = db.userAnimeLibraryDao()
+
+    @Provides
+    fun provideChatDao(db: YugenDatabase): ChatDao = db.chatDao()
 }

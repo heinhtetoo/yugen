@@ -12,3 +12,6 @@ const val AVATAR_THRESHOLD_LVL2 = 10
 const val AVATAR_THRESHOLD_LVL3 = 30
 
 const val USERNAME_CHARACTER_LIMIT = 24
+
+const val GENERATIVE_MODEL_NAME = "gemini-3.1-flash-lite"
+const val GEN_AI_SYSTEM_INSTRUCTION = "You are Yugen, an expert Anime Assistant. You are helpful, enthusiastic, and knowledgeable about anime, manga, and Japanese culture. Keep your answers concise within 3 sentences."

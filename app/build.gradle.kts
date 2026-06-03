@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,14 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     id("com.google.devtools.ksp")
+}
+
+val localProps = Properties()
+val localPropertiesFile = File(rootProject.rootDir,"local.properties")
+if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+    localPropertiesFile.inputStream().use {
+        localProps.load(it)
+    }
 }
 
 android {
@@ -21,6 +31,8 @@ android {
         versionName = "1.0.1-internal"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GEMINI_API_KEY", localProps.getProperty("STAGING_GEMINI_API_KEY"))
     }
 
     buildTypes {
@@ -41,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -89,6 +102,12 @@ dependencies {
 
     // Google Fonts
     implementation(libs.androidx.compose.ui.text.google.fonts)
+
+    // Google Generative AI (Gemini)
+    implementation(libs.generative.ai)
+
+    // Markdown support
+    implementation(libs.io.noties.markwon.core)
 
     // Chucker (Network Interceptor)
     debugImplementation(libs.chucker.debug)
