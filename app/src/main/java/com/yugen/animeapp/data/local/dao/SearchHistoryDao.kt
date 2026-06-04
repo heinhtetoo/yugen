@@ -3,7 +3,7 @@ package com.yugen.animeapp.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.yugen.animeapp.data.local.entities.SearchHistoryEntity
+import com.yugen.animeapp.data.local.entity.SearchHistoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

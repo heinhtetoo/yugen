@@ -1,8 +1,8 @@
 package com.yugen.animeapp.data.mapper
 
-import com.yugen.animeapp.data.local.entities.AnimeEntity
-import com.yugen.animeapp.data.local.entities.AnimeGenreCrossRefEntity
-import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entity.AnimeEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreCrossRefEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreEntity
 import com.yugen.animeapp.data.remote.model.AnimeDetailsResponse
 import com.yugen.animeapp.data.remote.model.AnimeGenreResponse
 import com.yugen.animeapp.data.remote.model.AnimeResponse

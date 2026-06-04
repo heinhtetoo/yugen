@@ -11,13 +11,13 @@ import com.yugen.animeapp.data.local.dao.AnimeGenreDao
 import com.yugen.animeapp.data.local.dao.ChatDao
 import com.yugen.animeapp.data.local.dao.LibraryDao
 import com.yugen.animeapp.data.local.dao.SearchHistoryDao
-import com.yugen.animeapp.data.local.entities.AnimeEntity
-import com.yugen.animeapp.data.local.entities.AnimeGenreCrossRefEntity
-import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
-import com.yugen.animeapp.data.local.entities.ChatMessageEntity
-import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
-import com.yugen.animeapp.data.local.entities.SearchHistoryEntity
-import com.yugen.animeapp.data.local.entities.UserAnimeLibraryEntity
+import com.yugen.animeapp.data.local.entity.AnimeEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreCrossRefEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entity.ChatMessageEntity
+import com.yugen.animeapp.data.local.entity.FavouriteAnimeEntity
+import com.yugen.animeapp.data.local.entity.SearchHistoryEntity
+import com.yugen.animeapp.data.local.entity.UserAnimeLibraryEntity
 
 @Database(
     entities = [

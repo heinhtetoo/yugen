@@ -9,4 +9,5 @@ interface ChatRepository {
     fun getAllMessages(): Flow<List<ChatMessage>>
     suspend fun sendMessage(userMessage: String): Flow<String>
     suspend fun clearHistory()
+    suspend fun resetSession()
 }
