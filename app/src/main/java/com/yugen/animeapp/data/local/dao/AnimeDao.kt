@@ -50,11 +50,17 @@ interface AnimeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenreLinks(links: List<AnimeGenreCrossRefEntity>)
 
+    @Query("DELETE FROM anime_genre_cross_refs WHERE genreId = :genreId")
+    suspend fun deleteGenreLinksByGenreId(genreId: Int)
+
     @Query("DELETE FROM anime_genre_cross_refs WHERE genreId IN (:genreIds)")
-    suspend fun deleteGenreLinks(genreIds: List<Int>)
+    suspend fun deleteGenreLinksByGenreIds(genreIds: List<Int>)
 
     @Query("DELETE FROM anime_genre_cross_refs WHERE animeId = :animeId")
     suspend fun deleteGenreLinksByAnimeId(animeId: Int)
+
+    @Query("SELECT MAX(position) FROM anime_genre_cross_refs WHERE genreId = :genreId")
+    suspend fun getMaxPositionForGenre(genreId: Int): Int?
 
     @Transaction
     suspend fun refreshAnimeListWithGenreLinks(
