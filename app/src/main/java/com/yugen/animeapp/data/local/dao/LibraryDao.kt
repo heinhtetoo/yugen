@@ -6,8 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
-import com.yugen.animeapp.data.local.entities.UserAnimeLibraryEntity
+import com.yugen.animeapp.data.local.entity.FavouriteAnimeEntity
+import com.yugen.animeapp.data.local.entity.UserAnimeLibraryEntity
 import com.yugen.animeapp.data.local.model.AnimeItem
 import com.yugen.animeapp.data.local.model.GenreStat
 import com.yugen.animeapp.data.local.model.LibraryItem

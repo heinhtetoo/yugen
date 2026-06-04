@@ -3,7 +3,7 @@ package com.yugen.animeapp.data.repository
 import android.util.Log
 import com.yugen.animeapp.data.generativeai.GenerativeAiClient
 import com.yugen.animeapp.data.local.dao.ChatDao
-import com.yugen.animeapp.data.local.entities.ChatMessageEntity
+import com.yugen.animeapp.data.local.entity.ChatMessageEntity
 import com.yugen.animeapp.data.mapper.toChatMessage
 import com.yugen.animeapp.domain.model.ChatMessage
 import com.yugen.animeapp.domain.repository.ChatRepository

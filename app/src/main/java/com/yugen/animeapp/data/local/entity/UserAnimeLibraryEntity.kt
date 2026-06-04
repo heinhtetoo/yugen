@@ -1,12 +1,13 @@
-package com.yugen.animeapp.data.local.entities
+package com.yugen.animeapp.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.yugen.animeapp.domain.model.WatchStatus
 
 @Entity(
-    tableName = "favourite_anime",
+    tableName = "user_anime_library",
     foreignKeys = [
         ForeignKey(
             entity = AnimeEntity::class,
@@ -17,7 +18,8 @@ import androidx.room.PrimaryKey
     ],
     indices = [Index(value = ["animeId"])]
 )
-data class FavouriteAnimeEntity(
+data class UserAnimeLibraryEntity(
     @PrimaryKey val animeId: Int,
-    val dateAdded: Long = System.currentTimeMillis()
+    val status: WatchStatus,
+    val lastUpdated: Long = System.currentTimeMillis()
 )

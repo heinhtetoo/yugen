@@ -6,9 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.yugen.animeapp.data.local.entities.AnimeGenreCrossRefEntity
-import com.yugen.animeapp.data.local.entities.AnimeEntity
-import com.yugen.animeapp.data.local.entities.FavouriteAnimeEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreCrossRefEntity
+import com.yugen.animeapp.data.local.entity.AnimeEntity
 import com.yugen.animeapp.data.local.model.AnimeItem
 import kotlinx.coroutines.flow.Flow
 

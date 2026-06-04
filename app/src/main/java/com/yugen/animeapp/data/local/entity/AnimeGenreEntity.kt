@@ -1,4 +1,4 @@
-package com.yugen.animeapp.data.local.entities
+package com.yugen.animeapp.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

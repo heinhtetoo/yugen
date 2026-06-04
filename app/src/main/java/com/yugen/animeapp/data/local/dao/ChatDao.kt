@@ -3,7 +3,7 @@ package com.yugen.animeapp.data.local.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.yugen.animeapp.data.local.entities.ChatMessageEntity
+import com.yugen.animeapp.data.local.entity.ChatMessageEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,7 +49,7 @@ import com.yugen.animeapp.R
 import com.yugen.animeapp.core.utils.getWatchStatusColour
 import com.yugen.animeapp.core.utils.getWatchStatusIcon
 import com.yugen.animeapp.core.utils.getWatchStatusLabelRes
-import com.yugen.animeapp.data.local.entities.AnimeEntity
+import com.yugen.animeapp.data.local.entity.AnimeEntity
 import com.yugen.animeapp.data.local.model.LibraryItem
 import com.yugen.animeapp.data.mapper.toAnime
 import com.yugen.animeapp.domain.model.Anime

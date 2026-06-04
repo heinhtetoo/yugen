@@ -1,7 +1,7 @@
 package com.yugen.animeapp.data.mapper
 
-import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
-import com.yugen.animeapp.data.local.entities.ChatMessageEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entity.ChatMessageEntity
 import com.yugen.animeapp.data.local.model.AnimeItem
 import com.yugen.animeapp.data.local.model.LibraryItem
 import com.yugen.animeapp.domain.model.Anime

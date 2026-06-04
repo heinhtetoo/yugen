@@ -1,6 +1,5 @@
-package com.yugen.animeapp.data.local.entities
+package com.yugen.animeapp.data.local.entity
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.yugen.animeapp.domain.model.Images

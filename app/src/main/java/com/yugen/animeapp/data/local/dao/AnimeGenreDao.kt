@@ -3,7 +3,7 @@ package com.yugen.animeapp.data.local.dao
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.yugen.animeapp.data.local.entities.AnimeGenreEntity
+import com.yugen.animeapp.data.local.entity.AnimeGenreEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

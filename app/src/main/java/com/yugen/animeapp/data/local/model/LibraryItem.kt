@@ -1,7 +1,7 @@
 package com.yugen.animeapp.data.local.model
 
 import androidx.room.Embedded
-import com.yugen.animeapp.data.local.entities.AnimeEntity
+import com.yugen.animeapp.data.local.entity.AnimeEntity
 import com.yugen.animeapp.domain.model.WatchStatus
 
 data class LibraryItem(
