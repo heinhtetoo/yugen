@@ -6,9 +6,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.yugen.animeapp.data.local.YugenDatabase
-import com.yugen.animeapp.data.local.entity.AnimeEntity
 import com.yugen.animeapp.data.local.entity.AnimeGenreCrossRefEntity
 import com.yugen.animeapp.data.local.entity.AnimeRemoteKeys
+import com.yugen.animeapp.data.local.model.AnimeItem
 import com.yugen.animeapp.data.mapper.toAnimeEntity
 import com.yugen.animeapp.data.remote.api.JikanApiService
 import dagger.assisted.Assisted
@@ -22,7 +22,7 @@ class AnimeGenreRemoteMediator @AssistedInject constructor(
     private val api: JikanApiService,
     private val db: YugenDatabase,
     @Assisted private val genreId: Int
-) : RemoteMediator<Int, AnimeEntity>() {
+) : RemoteMediator<Int, AnimeItem>() {
 
     @AssistedFactory
     interface Factory {
@@ -35,7 +35,7 @@ class AnimeGenreRemoteMediator @AssistedInject constructor(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, AnimeEntity>
+        state: PagingState<Int, AnimeItem>
     ): MediatorResult {
         return try {
             // Determine which page to fetch from the network
@@ -116,19 +116,19 @@ class AnimeGenreRemoteMediator @AssistedInject constructor(
         }
     }
 
-    suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeItem>): AnimeRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(animeId = anime.id, genreId) }
+            ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(animeId = anime.animeEntity.id, genreId) }
     }
 
-    suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeItem>): AnimeRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
-            ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(anime.id, genreId) }
+            ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(anime.animeEntity.id, genreId) }
     }
 
-    suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeItem>): AnimeRemoteKeys? {
         return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { animeId ->
+            state.closestItemToPosition(position)?.animeEntity?.id?.let { animeId ->
                 db.remoteKeysDao().remoteKeysAnimeId(animeId, genreId)
             }
         }
