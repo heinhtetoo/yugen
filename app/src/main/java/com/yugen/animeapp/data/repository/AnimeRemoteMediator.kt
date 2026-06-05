@@ -11,20 +11,26 @@ import com.yugen.animeapp.data.local.entity.AnimeGenreCrossRefEntity
 import com.yugen.animeapp.data.local.entity.AnimeRemoteKeys
 import com.yugen.animeapp.data.mapper.toAnimeEntity
 import com.yugen.animeapp.data.remote.api.JikanApiService
-import com.yugen.animeapp.domain.repository.AnimeGenreRemoteMediator
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import retrofit2.HttpException
 import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class AnimeGenreRemoteMediatorImpl @Inject constructor(
+class AnimeGenreRemoteMediator @AssistedInject constructor(
     private val api: JikanApiService,
     private val db: YugenDatabase,
-    private val genreId: Int
-) : RemoteMediator<Int, AnimeEntity>(), AnimeGenreRemoteMediator {
+    @Assisted private val genreId: Int
+) : RemoteMediator<Int, AnimeEntity>() {
+
+    @AssistedFactory
+    interface Factory {
+        fun create(genreId: Int): AnimeGenreRemoteMediator
+    }
 
     override suspend fun initialize(): InitializeAction {
-        return super.initialize()
+        return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
 
     override suspend fun load(
@@ -110,17 +116,17 @@ class AnimeGenreRemoteMediatorImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyForLastItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(animeId = anime.id, genreId) }
     }
 
-    override suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { anime -> db.remoteKeysDao().remoteKeysAnimeId(anime.id, genreId) }
     }
 
-    override suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
+    suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, AnimeEntity>): AnimeRemoteKeys? {
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { animeId ->
                 db.remoteKeysDao().remoteKeysAnimeId(animeId, genreId)
