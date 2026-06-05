@@ -1,5 +1,6 @@
 package com.yugen.animeapp.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -16,27 +17,41 @@ interface AnimeDao {
 
     @Query(
         """
-        SELECT 
-            a.* 
-            ,(f.animeId IS NOT NULL) AS isFavourite
-        FROM anime a
-        LEFT JOIN favourite_anime f ON a.id = f.animeId
-        INNER JOIN anime_genre_cross_refs c ON a.id = c.animeId
-        WHERE c.genreId = :genreId
-        ORDER BY c.dateAdded DESC
+            SELECT 
+                a.* 
+                ,(f.animeId IS NOT NULL) AS isFavourite
+            FROM anime a
+            LEFT JOIN favourite_anime f ON a.id = f.animeId
+            INNER JOIN anime_genre_cross_refs c ON a.id = c.animeId
+            WHERE c.genreId = :genreId
+            ORDER BY c.dateAdded DESC
         """
     )
     fun getAnimeListByGenreId(genreId: Int): Flow<List<AnimeItem>>
 
     @Query(
         """
-        SELECT
-            a.*
-            ,(f.animeId IS NOT NULL) AS isFavourite
-        FROM anime a
-        LEFT JOIN favourite_anime f ON a.id = f.animeId
-        LEFT JOIN anime_genre_cross_refs c ON a.id = c.animeId
-        WHERE a.id = :animeId
+            SELECT
+                a.* 
+                ,(f.animeId IS NOT NULL) AS isFavourite
+            FROM anime a
+            LEFT JOIN favourite_anime f ON a.id = f.animeId
+            INNER JOIN anime_genre_cross_refs c ON a.id = c.animeId
+            WHERE c.genreId = :genreId
+            ORDER BY c.position ASC
+        """
+    )
+    fun getPagedAnimeListByGenreId(genreId: Int): PagingSource<Int, AnimeItem>
+
+    @Query(
+        """
+            SELECT
+                a.*
+                ,(f.animeId IS NOT NULL) AS isFavourite
+            FROM anime a
+            LEFT JOIN favourite_anime f ON a.id = f.animeId
+            LEFT JOIN anime_genre_cross_refs c ON a.id = c.animeId
+            WHERE a.id = :animeId
         """
     )
     fun getAnimeDetailsByAnimeId(animeId: Int): Flow<AnimeItem?>
@@ -50,11 +65,17 @@ interface AnimeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenreLinks(links: List<AnimeGenreCrossRefEntity>)
 
+    @Query("DELETE FROM anime_genre_cross_refs WHERE genreId = :genreId")
+    suspend fun deleteGenreLinksByGenreId(genreId: Int)
+
     @Query("DELETE FROM anime_genre_cross_refs WHERE genreId IN (:genreIds)")
-    suspend fun deleteGenreLinks(genreIds: List<Int>)
+    suspend fun deleteGenreLinksByGenreIds(genreIds: List<Int>)
 
     @Query("DELETE FROM anime_genre_cross_refs WHERE animeId = :animeId")
     suspend fun deleteGenreLinksByAnimeId(animeId: Int)
+
+    @Query("SELECT MAX(position) FROM anime_genre_cross_refs WHERE genreId = :genreId")
+    suspend fun getMaxPositionForGenre(genreId: Int): Int?
 
     @Transaction
     suspend fun refreshAnimeListWithGenreLinks(
