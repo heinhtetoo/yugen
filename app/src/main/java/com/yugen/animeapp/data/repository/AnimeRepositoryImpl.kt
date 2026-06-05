@@ -1,8 +1,11 @@
 package com.yugen.animeapp.data.repository
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
+import com.yugen.animeapp.data.local.YugenDatabase
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
 import com.yugen.animeapp.data.local.dao.SearchHistoryDao
@@ -30,9 +33,11 @@ import javax.inject.Inject
 
 class AnimeRepositoryImpl @Inject constructor(
     private val api: JikanApiService,
+    private val db: YugenDatabase,
     private val animeDao: AnimeDao,
     private val genreDao: AnimeGenreDao,
-    private val searchDao: SearchHistoryDao
+    private val searchDao: SearchHistoryDao,
+    private val animeGenreRemoteMediatorFactory: AnimeGenreRemoteMediator.Factory
 ) : AnimeRepository {
 
     override fun getAnimeGenres(): Flow<List<AnimeGenre>> =
@@ -126,7 +131,7 @@ class AnimeRepositoryImpl @Inject constructor(
 //        dao.insertAnimeList(list.map { it.toAnimeEntity(isTopUpcoming = true) })
 //    }
 
-    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
+    /*override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -134,7 +139,18 @@ class AnimeRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { AnimePagingSource(api, genreId) }
-        ).flow
+        ).flow*/
+
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 25,
+                enablePlaceholders = false
+            ),
+            remoteMediator = animeGenreRemoteMediatorFactory.create(genreId = genreId),
+            pagingSourceFactory = { animeDao.getPagedAnimeListByGenreId(genreId = genreId) }
+        ).flow.map { pagingData -> pagingData.map { animeItem -> animeItem.toAnime() } }
 
     override fun searchPagedAnime(
         genreId: Int?,

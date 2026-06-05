@@ -87,6 +87,7 @@ dependencies {
 
     // Room (Database)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
