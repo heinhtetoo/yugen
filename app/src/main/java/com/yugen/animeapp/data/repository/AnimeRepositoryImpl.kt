@@ -5,7 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.yugen.animeapp.data.local.YugenDatabase
 import com.yugen.animeapp.data.local.dao.AnimeDao
 import com.yugen.animeapp.data.local.dao.AnimeGenreDao
 import com.yugen.animeapp.data.local.dao.SearchHistoryDao
@@ -33,7 +32,6 @@ import javax.inject.Inject
 
 class AnimeRepositoryImpl @Inject constructor(
     private val api: JikanApiService,
-    private val db: YugenDatabase,
     private val animeDao: AnimeDao,
     private val genreDao: AnimeGenreDao,
     private val searchDao: SearchHistoryDao,
