@@ -105,7 +105,9 @@ class AnimeGenreRemoteMediator @AssistedInject constructor(
 
                 // Insert new data and keys into the database
                 db.remoteKeysDao().insertAll(keys)
-                db.animeDao().refreshAnimeListWithGenreLinks(entities, crossRefs)
+                db.animeDao().upsertAnimeList(entities)
+                db.animeDao().insertGenreLinks(crossRefs)
+//                db.animeDao().refreshAnimeListWithGenreLinks(entities, crossRefs)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
