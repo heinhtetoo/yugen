@@ -88,6 +88,7 @@ interface LibraryDao {
         FROM user_anime_library l
         INNER JOIN anime_genre_cross_refs c ON l.animeId = c.animeId
         INNER JOIN anime_genres g ON c.genreId = g.id
+        WHERE g.id >= 0
         GROUP BY g.id
         ORDER BY count DESC
         LIMIT 5
