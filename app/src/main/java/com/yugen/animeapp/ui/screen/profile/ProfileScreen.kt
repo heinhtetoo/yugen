@@ -407,6 +407,7 @@ fun GenreDistributionSection(genres: List<GenreStat>) {
                         modifier = Modifier
                             .fillMaxWidth(fraction = (genre.count / maxCount))
                             .fillMaxHeight()
+                            .clip(RoundedCornerShape(dimensionResource(R.dimen.rounded_corner_shape_xsmall)))
                             .background(MaterialTheme.colorScheme.primary)
                     )
                 }
@@ -521,7 +522,7 @@ private fun ProfileBodyPreview() {
             30,
             4,
             20,
-            listOf(GenreStat("Action", 20), GenreStat("Comedy", 1))
+            listOf(GenreStat("Action", 20), GenreStat("Comedy", 7))
         ),
         currentTheme = ThemePreference.SYSTEM,
         onUsernameChanged = {},
