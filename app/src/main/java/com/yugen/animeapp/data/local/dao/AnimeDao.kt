@@ -2,6 +2,7 @@ package com.yugen.animeapp.data.local.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -62,6 +63,9 @@ interface AnimeDao {
     @Upsert
     suspend fun upsertAnimeList(list: List<AnimeEntity>)
 
+    @Query("DELETE FROM anime WHERE id IN (:animeIds)")
+    suspend fun deleteAnimeByIds(animeIds: List<Int>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenreLinks(links: List<AnimeGenreCrossRefEntity>)
 
@@ -82,25 +86,30 @@ interface AnimeDao {
         list: List<AnimeEntity>,
         links: List<AnimeGenreCrossRefEntity>
     ) {
-        val newIds = list.map { it.id }
-        val localMap = getAnimeSubsetByIds(newIds).associateBy { it.id }
-        val mergedList = list.map { remoteAnime ->
-            val localAnime = localMap[remoteAnime.id]
-            if (localAnime != null && !localAnime.type.isNullOrEmpty()) {
-                remoteAnime.copy(
-                    titleEnglish = localAnime.titleEnglish,
-                    titleJapanese = localAnime.titleJapanese,
-                    type = localAnime.type,
-                    episodes = localAnime.episodes,
-                    rating = localAnime.rating
-                )
-            } else {
-                remoteAnime
-            }
-        }
+//        val newIds = list.map { it.id }
+//        val localMap = getAnimeSubsetByIds(newIds).associateBy { it.id }
+//        val mergedList = list.map { remoteAnime ->
+//            val localAnime = localMap[remoteAnime.id]
+//            if (localAnime != null && !localAnime.type.isNullOrEmpty()) {
+//                remoteAnime.copy(
+//                    titleEnglish = localAnime.titleEnglish,
+//                    titleJapanese = localAnime.titleJapanese,
+//                    type = localAnime.type,
+//                    episodes = localAnime.episodes,
+//                    rating = localAnime.rating
+//                )
+//            } else {
+//                remoteAnime
+//            }
+//        }
+//
+//        upsertAnimeList(mergedList)
+//        mergedList.forEach { anime -> deleteGenreLinksByAnimeId(anime.id) }
+//        insertGenreLinks(links)
 
-        upsertAnimeList(mergedList)
-        mergedList.forEach { anime -> deleteGenreLinksByAnimeId(anime.id) }
+        val genreIds = links.map { it.genreId }
+        deleteGenreLinksByGenreIds(genreIds)
+        upsertAnimeList(list)
         insertGenreLinks(links)
     }
 

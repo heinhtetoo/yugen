@@ -49,12 +49,12 @@ fun AnimeResponse.toAnimeEntity(): AnimeEntity =
         synopsis = synopsis
     )
 
-fun AnimeResponse.toAnimeGenreCrossRefEntityList(): List<AnimeGenreCrossRefEntity> {
-    return genres?.mapIndexed { index, genre ->
+fun AnimeResponse.toAnimeGenreCrossRefEntityList(position: Int): List<AnimeGenreCrossRefEntity> {
+    return genres?.map { genre ->
         AnimeGenreCrossRefEntity(
             genreId = genre.id,
             animeId = id,
-            position = index
+            position = position
         )
     } ?: emptyList()
 }
