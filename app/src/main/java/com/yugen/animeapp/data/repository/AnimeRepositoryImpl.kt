@@ -1,5 +1,6 @@
 package com.yugen.animeapp.data.repository
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -26,6 +27,7 @@ import com.yugen.animeapp.domain.model.AnimeGenre
 import com.yugen.animeapp.domain.model.DefaultHomeSectionType
 import com.yugen.animeapp.domain.repository.AnimeRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import java.lang.Exception
 import javax.inject.Inject
@@ -98,7 +100,7 @@ class AnimeRepositoryImpl @Inject constructor(
 
             animeDao.refreshAnimeListWithGenreLinks(
                 list = customList.map { it.toAnimeEntity() },
-                links = customList.flatMap { it.toAnimeGenreCrossRefEntityList() }
+                links = customList.flatMapIndexed { index, response -> response.toAnimeGenreCrossRefEntityList(index) }
             )
         } else refreshAnimeListByGenreId(type.genreId)
     }
@@ -109,11 +111,22 @@ class AnimeRepositoryImpl @Inject constructor(
 
     override suspend fun refreshAnimeListByGenreId(genreId: Int) {
         val response = api.fetchAnimeListByGenreId(genreId = genreId, page = 1)
-        val list = response.data ?: emptyList()
+        val genre = genreDao.getAnimeGenreById(genreId).firstOrNull()
+        val list = response.data?.map {
+            it.copy(
+                genres = listOf(
+                    AnimeGenreResponse(
+                        id = genreId,
+                        name = genre?.name ?: "",
+                        url = ""
+                    )
+                )
+            )
+        } ?: emptyList()
 
         animeDao.refreshAnimeListWithGenreLinks(
             list = list.map { it.toAnimeEntity() },
-            links = list.flatMap { it.toAnimeGenreCrossRefEntityList() }
+            links = list.flatMapIndexed { index, response -> response.toAnimeGenreCrossRefEntityList(index) }
         )
     }
 
@@ -129,7 +142,7 @@ class AnimeRepositoryImpl @Inject constructor(
 //        dao.insertAnimeList(list.map { it.toAnimeEntity(isTopUpcoming = true) })
 //    }
 
-    /*override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
+    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
         Pager(
             config = PagingConfig(
                 pageSize = 25,
@@ -137,18 +150,18 @@ class AnimeRepositoryImpl @Inject constructor(
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { AnimePagingSource(api, genreId) }
-        ).flow*/
+        ).flow
 
-    @OptIn(ExperimentalPagingApi::class)
-    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
-        Pager(
-            config = PagingConfig(
-                pageSize = 25,
-                enablePlaceholders = false
-            ),
-            remoteMediator = animeGenreRemoteMediatorFactory.create(genreId = genreId),
-            pagingSourceFactory = { animeDao.getPagedAnimeListByGenreId(genreId = genreId) }
-        ).flow.map { pagingData -> pagingData.map { animeItem -> animeItem.toAnime() } }
+//    @OptIn(ExperimentalPagingApi::class)
+//    override fun getPagedAnimeListByGenreId(genreId: Int): Flow<PagingData<Anime>> =
+//        Pager(
+//            config = PagingConfig(
+//                pageSize = 25,
+//                enablePlaceholders = false
+//            ),
+//            remoteMediator = animeGenreRemoteMediatorFactory.create(genreId = genreId),
+//            pagingSourceFactory = { animeDao.getPagedAnimeListByGenreId(genreId = genreId) }
+//        ).flow.map { pagingData -> pagingData.map { animeItem -> animeItem.toAnime() } }
 
     override fun searchPagedAnime(
         genreId: Int?,
